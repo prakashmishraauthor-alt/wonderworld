@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Worlds &amp; Screen-Free Vault — WonderWorld Kids (Ages 2–11)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Fredoka', 'sans-serif'],
+            sans: ['Lexend', 'sans-serif'],
+          },
+          colors: {
+            cream: '#FAF7F0',
+            sand: '#F2ECE1',
+            sage: '#4D7C6F',
+            sageLight: '#E4EFEA',
+            terracotta: '#D96B43',
+            terracottaLight: '#FCEBE4',
+            ochre: '#E5A93B',
+            ochreLight: '#FDF5E2',
+            sky: '#4A89B8',
+            skyLight: '#E5F1FA',
+            ink: '#2A2F33',
+            muted: '#5E666E',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF7F0;
+      color: #2A2F33;
+      font-family: 'Lexend', sans-serif;
+    }
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Fredoka', sans-serif;
+    }
+    /* 3D Flashcard Flip */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .preserve-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .flipped {
+      transform: rotateY(180deg);
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    /* Montessori tactile depth */
+    .tactile-card {
+      box-shadow: 0 6px 0 rgba(42, 47, 51, 0.08), 0 12px 24px rgba(42, 47, 51, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .tactile-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0 rgba(42, 47, 51, 0.1), 0 16px 28px rgba(42, 47, 51, 0.07);
+    }
+    .tactile-btn {
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+      transition: all 0.15s ease;
+    }
+    .tactile-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float {
+      animation: floatSlow 4s ease-in-out infinite;
+    }
+    @keyframes rocketLaunch {
+      0% { transform: translateY(0) scale(1); }
+      40% { transform: translateY(-18px) scale(1.05); }
+      100% { transform: translateY(-130px) scale(0.85); opacity: 0; }
+    }
+    .rocket-launching {
+      animation: rocketLaunch 1.4s ease-in forwards;
+    }
+    /* Print-only styling for sample worksheet modal */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #printable-sheet-area, #printable-sheet-area * {
+        visibility: visible !important;
+      }
+      #printable-sheet-area {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        background: white !important;
+        padding: 20px !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-ochreLight selection:text-ink">
+
+  <!-- Toast Notification Container (Replaces alert) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Top Sticky Header & Sibling Mode Switcher -->
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-md border-b border-stone-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Main Nav Row -->
+      <div class="flex flex-wrap items-center justify-between py-3 gap-3">
+        <!-- Left: Prominent Back to Home + Brand Logo linking to index.html -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <a href="index.html" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-stone-200 hover:border-sage text-xs sm:text-sm font-semibold text-ink shadow-sm transition group" title="Return to Main Homepage">
+            <svg class="w-4 h-4 text-sage group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span>Home</span>
+          </a>
+
+          <a href="index.html" class="flex items-center gap-2.5 group">
+            <div class="w-10 h-10 rounded-2xl bg-sage text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18M3 12h18" />
+              </svg>
+            </div>
+            <div>
+              <span class="font-display text-lg sm:text-2xl font-bold tracking-tight text-ink block leading-none">WonderWorld <span class="text-terracotta">Kids</span></span>
+              <span class="text-[10px] sm:text-[11px] font-medium text-muted tracking-wide uppercase">Explore Hub • Ages 2–11</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden xl:flex items-center gap-5 text-sm font-medium text-muted">
+          <a href="#worlds" class="hover:text-sage transition">Interactive Worlds</a>
+          <a href="#stories" class="hover:text-terracotta transition">Moral Stories</a>
+          <a href="#flashcards" class="hover:text-sky transition">Smart Flashcards</a>
+          <a href="#vault" class="px-3.5 py-1.5 rounded-full bg-ochreLight text-ink font-semibold border border-ochre/40 hover:bg-ochre/20 transition flex items-center gap-1.5">
+            <span>20,000+ PDF Vault &amp; School Packs</span>
+          </a>
+        </nav>
+
+        <!-- Read Aloud Toggle + Vault Quick CTA -->
+        <div class="flex items-center gap-2">
+          <button id="tts-toggle-btn" onclick="toggleReadAloud()" class="flex items-center gap-2 px-3 py-2 rounded-xl border border-stone-300 bg-white text-xs sm:text-sm font-semibold text-ink hover:bg-stone-50 transition" title="Toggle Web Speech Audio Narration">
+            <span id="tts-indicator" class="w-2.5 h-2.5 rounded-full bg-stone-300"></span>
+            <span id="tts-label">Read Aloud: Off</span>
+          </button>
+          <button onclick="openVaultModal('04_Preschool_and_School_Packs')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sage text-white text-xs sm:text-sm font-semibold tactile-btn hover:bg-sage/90">
+            <span>Free Sample PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sibling Mode Age-Band Switcher Bar -->
+      <div class="pb-3 pt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-stone-200/60">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-muted flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Sibling Mode:
+          </span>
+          <span id="age-pedagogy-badge" class="hidden md:inline-block text-xs text-sage font-medium bg-sageLight px-2.5 py-0.5 rounded-full">
+            Interactive cause-and-effect, phonics &amp; rule-based play
+          </span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-1.5 bg-sand p-1 rounded-2xl border border-stone-200/80 w-full sm:w-auto" role="tablist" aria-label="Age Band Selector">
+          <button onclick="setAgeBand('2-4', true)" id="btn-age-2-4" class="age-tab px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition text-center">
+            Ages 2–4 <span class="hidden md:inline font-normal opacity-80">(Explorers)</span>
+          </button>
+          <button onclick="setAgeBand('5-7', true)" id="btn-age-5-7" class="age-tab px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition text-center">
+            Ages 5–7 <span class="hidden md:inline font-normal opacity-80">(Builders)</span>
+          </button>
+          <button onclick="setAgeBand('8-11', true)" id="btn-age-8-11" class="age-tab px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition text-center">
+            Ages 8–11 <span class="hidden md:inline font-normal opacity-80">(Navigators)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <!-- Left Copy -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full bg-sageLight border border-sage/20 text-sage text-xs sm:text-sm font-semibold">
+            <span>100% Free Interactive Web Worlds</span>
+            <span>•</span>
+            <span>20,000+ Screen-Free Printable Vault &amp; School Packs</span>
+          </div>
+
+          <h1 id="hero-title" class="text-4xl sm:text-5xl lg:text-6xl font-bold text-ink leading-[1.12]">
+            Where Curious Minds Learn &amp; Play — <span class="text-terracotta">On Screen</span> &amp; <span class="text-sage">Off Screen</span>.
+          </h1>
+
+          <p id="hero-subtitle" class="text-base sm:text-lg text-muted max-w-2xl leading-relaxed">
+            Welcome to our expanded learning universe for ages 2 to 11. Explore interactive Animal Farms, Space Missions, Traffic Safety, Daily Hygiene, and Branching Moral Stories free online—then continue learning screen-free with our indexed printable mega-bundles and preschool classroom packs.
+          </p>
+
+          <!-- Value Pillars -->
+          <div class="flex flex-wrap gap-3 pt-1">
+            <a href="#worlds" class="px-6 py-3.5 rounded-2xl bg-terracotta text-white font-display font-semibold text-base sm:text-lg tactile-btn hover:bg-terracotta/90 flex items-center gap-2">
+              <span>Start Exploring Free</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#vault" class="px-6 py-3.5 rounded-2xl bg-white text-ink border-2 border-stone-200 font-display font-semibold text-base sm:text-lg tactile-btn hover:border-ochre flex items-center gap-2">
+              <span>Explore 20,000+ PDF Vault &amp; School Packs</span>
+            </a>
+          </div>
+
+          <!-- Quick Trust Metrics -->
+          <div class="grid grid-cols-3 gap-4 pt-4 border-t border-stone-200/80 max-w-xl">
+            <div>
+              <div class="font-display text-2xl font-bold text-sage">100% Free</div>
+              <div class="text-xs text-muted">All interactive worlds, stories &amp; flashcards</div>
+            </div>
+            <div>
+              <div class="font-display text-2xl font-bold text-terracotta">20,000+</div>
+              <div class="text-xs text-muted">Indexed printable pages (A4 + US Letter)</div>
+            </div>
+            <div>
+              <div class="font-display text-2xl font-bold text-sky">Ages 2–11</div>
+              <div class="text-xs text-muted">3 developmental tiers + School Packs</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Interactive Visual Preview Card -->
+        <div class="lg:col-span-5">
+          <div class="bg-white rounded-3xl p-6 sm:p-7 border border-stone-200/80 tactile-card relative">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-sage bg-sageLight px-3 py-1 rounded-full">Learn → Play → Apply Loop</span>
+              <span id="hero-active-tier-pill" class="text-xs font-semibold text-terracotta bg-terracottaLight px-3 py-1 rounded-full">Tier: Ages 5–7</span>
+            </div>
+
+            <!-- Interactive Pathway Visual -->
+            <div class="space-y-3">
+              <div onclick="document.getElementById('worlds').scrollIntoView()" class="cursor-pointer p-4 rounded-2xl bg-skyLight/60 border border-sky/20 hover:bg-skyLight transition flex items-start gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-sky text-white flex items-center justify-center shrink-0 font-display font-bold text-lg">1</div>
+                <div>
+                  <h3 class="font-display font-bold text-ink text-lg">Free Digital Discovery</h3>
+                  <p class="text-xs sm:text-sm text-muted">Tap animals, launch rockets, practice crossing streets safely, and build healthy habits.</p>
+                </div>
+              </div>
+
+              <div onclick="document.getElementById('stories').scrollIntoView()" class="cursor-pointer p-4 rounded-2xl bg-terracottaLight/60 border border-terracotta/20 hover:bg-terracottaLight transition flex items-start gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-terracotta text-white flex items-center justify-center shrink-0 font-display font-bold text-lg">2</div>
+                <div>
+                  <h3 class="font-display font-bold text-ink text-lg">Empathy &amp; Active Recall</h3>
+                  <p class="text-xs sm:text-sm text-muted">Make choices in branching moral stories and flip Montessori 3-part smart flashcards.</p>
+                </div>
+              </div>
+
+              <div onclick="openVaultModal('04_Preschool_and_School_Packs')" class="cursor-pointer p-4 rounded-2xl bg-ochreLight/80 border border-ochre/30 hover:bg-ochreLight transition flex items-start gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-ochre text-ink flex items-center justify-center shrink-0 font-display font-bold text-lg">3</div>
+                <div>
+                  <h3 class="font-display font-bold text-ink text-lg">Screen-Free PDF &amp; School Packs</h3>
+                  <p class="text-xs sm:text-sm text-muted">Print 3D crafts, routine charts, road-sign bingo &amp; teacher classroom kits.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 1: INTERACTIVE LEARNING WORLDS -->
+  <section id="worlds" class="py-12 sm:py-16 bg-sand/60 border-y border-stone-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-sage">100% Free Interactive Playgrounds</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-ink mt-1">Explore Real-World Interactive Modules</h2>
+          <p id="worlds-subtitle" class="text-sm sm:text-base text-muted mt-1 max-w-2xl">
+            Every world adapts automatically to your selected Sibling Mode age band. Click tabs below to switch worlds.
+          </p>
+        </div>
+
+        <!-- World Selector Tabs -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="switchWorld('farm', true)" id="tab-world-farm" class="world-tab px-4 py-2.5 rounded-2xl font-display font-semibold text-sm sm:text-base flex items-center gap-2 transition">
+            <span>🐄 Animal Farm</span>
+          </button>
+          <button onclick="switchWorld('space', true)" id="tab-world-space" class="world-tab px-4 py-2.5 rounded-2xl font-display font-semibold text-sm sm:text-base flex items-center gap-2 transition">
+            <span>🚀 Space Explorer</span>
+          </button>
+          <button onclick="switchWorld('traffic', true)" id="tab-world-traffic" class="world-tab px-4 py-2.5 rounded-2xl font-display font-semibold text-sm sm:text-base flex items-center gap-2 transition">
+            <span>🚦 Traffic &amp; Safety</span>
+          </button>
+          <button onclick="switchWorld('hygiene', true)" id="tab-world-hygiene" class="world-tab px-4 py-2.5 rounded-2xl font-display font-semibold text-sm sm:text-base flex items-center gap-2 transition">
+            <span>🪥 Hygiene &amp; Body</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- WORLD 1: ANIMAL FARM -->
+      <div id="world-panel-farm" class="world-panel bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/90 tactile-card">
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+          <!-- Interactive Farm Canvas / Meadow -->
+          <div class="lg:col-span-7">
+            <div class="rounded-3xl bg-gradient-to-b from-skyLight via-emerald-50 to-lime-100 border-2 border-sage/20 p-5 sm:p-6 relative overflow-hidden">
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-3 py-1 rounded-full bg-white/90 text-xs font-bold text-sage shadow-sm">Tap any animal or tractor to hear &amp; learn!</span>
+                <span id="farm-age-tag" class="px-3 py-1 rounded-full bg-sage text-white text-xs font-semibold">Ages 5–7 Mode</span>
+              </div>
+
+              <!-- Interactive Farm Grid -->
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 my-2">
+                <button onclick="selectFarmItem('cow')" class="farm-btn group p-4 rounded-2xl bg-white/90 hover:bg-white border-2 border-transparent hover:border-sage transition text-center shadow-sm">
+                  <div class="text-4xl sm:text-5xl mb-2 group-hover:scale-110 transition">🐄</div>
+                  <div class="font-display font-bold text-ink text-base">Dairy Cow</div>
+                  <div class="text-[11px] text-muted">Tap for Moo &amp; Facts</div>
+                </button>
+
+                <button onclick="selectFarmItem('chicken')" class="farm-btn group p-4 rounded-2xl bg-white/90 hover:bg-white border-2 border-transparent hover:border-sage transition text-center shadow-sm">
+                  <div class="text-4xl sm:text-5xl mb-2 group-hover:scale-110 transition">🐓</div>
+                  <div class="font-display font-bold text-ink text-base">Barn Hen</div>
+                  <div class="text-[11px] text-muted">Tap for Cluck &amp; Facts</div>
+                </button>
+
+                <button onclick="selectFarmItem('sheep')" class="farm-btn group p-4 rounded-2xl bg-white/90 hover:bg-white border-2 border-transparent hover:border-sage transition text-center shadow-sm">
+                  <div class="text-4xl sm:text-5xl mb-2 group-hover:scale-110 transition">🐑</div>
+                  <div class="font-display font-bold text-ink text-base">Woolly Sheep</div>
+                  <div class="text-[11px] text-muted">Tap for Baa &amp; Facts</div>
+                </button>
+
+                <button onclick="selectFarmItem('bee')" class="farm-btn group p-4 rounded-2xl bg-white/90 hover:bg-white border-2 border-transparent hover:border-sage transition text-center shadow-sm">
+                  <div class="text-4xl sm:text-5xl mb-2 group-hover:scale-110 transition">🐝</div>
+                  <div class="font-display font-bold text-ink text-base">Honey Bee</div>
+                  <div class="text-[11px] text-muted">Tap for Buzz &amp; Facts</div>
+                </button>
+
+                <button onclick="selectFarmItem('tractor')" class="farm-btn group p-4 rounded-2xl bg-white/90 hover:bg-white border-2 border-transparent hover:border-sage transition text-center shadow-sm col-span-2 sm:col-span-2">
+                  <div class="text-4xl sm:text-5xl mb-2 group-hover:scale-110 transition">🚜</div>
+                  <div class="font-display font-bold text-ink text-base">Harvest Tractor &amp; Soil</div>
+                  <div class="text-[11px] text-muted">Tap for Engine &amp; Crop Rotation</div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Discovery Inspector Card -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="p-5 sm:p-6 rounded-3xl bg-cream border border-stone-200">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <span id="farm-detail-emoji" class="text-4xl">🐄</span>
+                  <div>
+                    <h3 id="farm-detail-title" class="font-display text-2xl font-bold text-ink">Dairy Cow</h3>
+                    <span id="farm-detail-sound" class="text-xs font-semibold text-terracotta">Sound: "Moooo!"</span>
+                  </div>
+                </div>
+                <button onclick="speakCurrentFarm()" class="p-2.5 rounded-xl bg-sageLight text-sage hover:bg-sage hover:text-white transition" title="Listen Aloud">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                </button>
+              </div>
+
+              <p id="farm-detail-desc" class="text-sm sm:text-base text-ink/90 leading-relaxed mb-4">
+                Cows eat fresh grass and hay. They give us nutritious milk, which farmers and cheesemakers turn into yogurt, butter, and cheese!
+              </p>
+
+              <!-- Farm-to-Table Connection Pill -->
+              <div class="p-3.5 rounded-2xl bg-white border border-stone-200/80">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-sage mb-1">Farm-to-Table Connection</div>
+                <div id="farm-detail-chain" class="text-sm font-semibold text-ink">🌱 Grass &amp; Clover → 🐄 Cow → 🥛 Milk → 🧀 Cheese</div>
+              </div>
+            </div>
+
+            <!-- Screen-Free Bridge -->
+            <div class="p-4 rounded-2xl bg-ochreLight/70 border border-ochre/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-ink">Screen-Free Companion PDF</div>
+                <div class="text-xs text-muted">3D Paper Barn Diorama &amp; Farm 3-Part Cards</div>
+              </div>
+              <button onclick="openVaultModal('02_Ages_5-7')" class="px-3.5 py-2 rounded-xl bg-ochre text-ink font-semibold text-xs tactile-btn shrink-0">
+                Preview &amp; Print Free Sheet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORLD 2: SPACE EXPLORER -->
+      <div id="world-panel-space" class="world-panel hidden bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/90 tactile-card">
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7">
+            <div class="rounded-3xl bg-slate-900 text-white p-6 relative overflow-hidden border-2 border-slate-700">
+              <div class="flex items-center justify-between mb-5">
+                <span class="px-3 py-1 rounded-full bg-white/10 text-xs font-semibold text-sky-300">Click a planet or launch the mission rocket!</span>
+                <button onclick="launchSpaceRocket()" class="px-4 py-1.5 rounded-full bg-terracotta hover:bg-terracotta/90 text-white font-display font-semibold text-xs sm:text-sm tactile-btn flex items-center gap-1.5">
+                  <span>🚀 Launch Mission</span>
+                </button>
+              </div>
+
+              <!-- Planets & Rocket Visual -->
+              <div class="grid grid-cols-4 gap-3 items-center py-4 text-center">
+                <button onclick="selectPlanet('sun')" class="p-3 rounded-2xl bg-white/5 hover:bg-white/15 transition flex flex-col items-center">
+                  <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-amber-300 to-orange-500 shadow-lg shadow-amber-500/30 mb-2"></div>
+                  <span class="font-display text-sm font-bold">The Sun</span>
+                </button>
+
+                <button onclick="selectPlanet('earth')" class="p-3 rounded-2xl bg-white/5 hover:bg-white/15 transition flex flex-col items-center">
+                  <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-sky-400 to-emerald-500 shadow-lg shadow-sky-500/30 mb-2"></div>
+                  <span class="font-display text-sm font-bold">Earth</span>
+                </button>
+
+                <button onclick="selectPlanet('mars')" class="p-3 rounded-2xl bg-white/5 hover:bg-white/15 transition flex flex-col items-center">
+                  <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-red-400 to-orange-700 shadow-lg shadow-red-500/30 mb-2"></div>
+                  <span class="font-display text-sm font-bold">Mars</span>
+                </button>
+
+                <button onclick="selectPlanet('saturn')" class="p-3 rounded-2xl bg-white/5 hover:bg-white/15 transition flex flex-col items-center">
+                  <div class="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 mb-2">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-200 to-amber-500"></div>
+                    <div class="absolute w-14 h-3 border-2 border-amber-200/80 rounded-full -rotate-12"></div>
+                  </div>
+                  <span class="font-display text-sm font-bold">Saturn</span>
+                </button>
+              </div>
+
+              <!-- Rocket Launch Pad Status -->
+              <div class="mt-3 pt-3 border-t border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span id="rocket-sprite" class="text-3xl inline-block">🚀</span>
+                  <div id="rocket-status-text" class="text-xs sm:text-sm text-slate-300">Ready on Launchpad 1. Click "Launch Mission" to test thrust &amp; gravity!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Planet Discovery Panel -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="p-5 sm:p-6 rounded-3xl bg-cream border border-stone-200">
+              <div class="flex items-center justify-between mb-2">
+                <h3 id="space-detail-title" class="font-display text-2xl font-bold text-ink">Planet Earth</h3>
+                <span id="space-detail-stat" class="text-xs font-bold px-2.5 py-1 rounded-full bg-skyLight text-sky">1 Moon • 365 Days Orbit</span>
+              </div>
+              <p id="space-detail-desc" class="text-sm sm:text-base text-ink/90 leading-relaxed mb-4">
+                Earth is our home planet! It is the only known planet with liquid water oceans on its surface and breathable air for plants, animals, and humans.
+              </p>
+              <div class="p-3.5 rounded-2xl bg-white border border-stone-200/80">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-sky mb-1">Mission Challenge</div>
+                <div id="space-detail-challenge" class="text-sm font-medium text-ink">Can you spot the Moon tonight and draw its shape?</div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-ochreLight/70 border border-ochre/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-ink">Screen-Free Space Pack</div>
+                <div class="text-xs text-muted">Printable Passport to Space &amp; Constellation Cards</div>
+              </div>
+              <button onclick="openVaultModal('03_Ages_8-11')" class="px-3.5 py-2 rounded-xl bg-ochre text-ink font-semibold text-xs tactile-btn shrink-0">
+                Preview &amp; Print Free Sheet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORLD 3: TRAFFIC & ROAD SAFETY SIMULATOR -->
+      <div id="world-panel-traffic" class="world-panel hidden bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/90 tactile-card">
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7">
+            <div class="rounded-3xl bg-stone-800 text-white p-6 border-2 border-stone-700">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-300">Interactive Crosswalk &amp; Road Sign Simulator</span>
+                <span id="traffic-score-pill" class="px-3 py-1 rounded-full bg-white/10 text-xs font-semibold">Safety Stars: 0 ⭐</span>
+              </div>
+
+              <!-- Interactive Crosswalk Visual -->
+              <div class="bg-stone-700 rounded-2xl p-4 mb-4 border border-stone-600">
+                <div class="flex items-center justify-between gap-4">
+                  <!-- Traffic Signal Box -->
+                  <div class="bg-stone-900 p-3 rounded-2xl border border-stone-600 flex flex-col items-center gap-2 shrink-0">
+                    <div id="light-red" class="w-8 h-8 rounded-full bg-red-500 shadow-lg shadow-red-500/60 transition"></div>
+                    <div id="light-yellow" class="w-8 h-8 rounded-full bg-amber-900/40 transition"></div>
+                    <div id="light-green" class="w-8 h-8 rounded-full bg-emerald-900/40 transition"></div>
+                    <span id="signal-label" class="text-[10px] font-bold uppercase tracking-wider text-red-300 mt-1">Cars Stop</span>
+                  </div>
+
+                  <!-- Zebra Crosswalk & Action -->
+                  <div class="flex-1 bg-stone-600 rounded-xl p-4 relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                      <span id="pedestrian-status" class="text-sm font-bold text-emerald-300">🚶 Walk Sign: SAFE TO CROSS (After Looking Left &amp; Right!)</span>
+                    </div>
+                    <!-- Zebra stripes -->
+                    <div class="grid grid-cols-6 gap-2 my-3">
+                      <div class="h-3 bg-white/90 rounded-sm"></div>
+                      <div class="h-3 bg-white/90 rounded-sm"></div>
+                      <div class="h-3 bg-white/90 rounded-sm"></div>
+                      <div class="h-3 bg-white/90 rounded-sm"></div>
+                      <div class="h-3 bg-white/90 rounded-sm"></div>
+                      <div class="h-3 bg-white/90 rounded-sm"></div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      <button onclick="toggleTrafficLight()" class="px-3.5 py-2 rounded-xl bg-amber-400 text-stone-900 font-bold text-xs tactile-btn">
+                        Change Traffic Light
+                      </button>
+                      <button onclick="attemptCrosswalk()" class="px-3.5 py-2 rounded-xl bg-emerald-500 text-white font-bold text-xs tactile-btn">
+                        Look Left-Right &amp; Cross
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Road Sign Quick Quiz -->
+              <div class="bg-stone-900/70 rounded-2xl p-4">
+                <div class="text-xs font-semibold text-stone-300 mb-2.5">Tap the correct road sign meaning: <strong id="sign-quiz-prompt" class="text-white">"Which sign means STOP completely?"</strong></div>
+                <div class="grid grid-cols-3 gap-2.5">
+                  <button onclick="checkRoadSign('stop')" class="p-3 rounded-xl bg-white/10 hover:bg-white/20 transition flex flex-col items-center gap-1">
+                    <span class="w-10 h-10 rounded-lg bg-red-600 text-white font-bold text-xs flex items-center justify-center border-2 border-white">STOP</span>
+                    <span class="text-[11px]">Octagon Sign</span>
+                  </button>
+                  <button onclick="checkRoadSign('school')" class="p-3 rounded-xl bg-white/10 hover:bg-white/20 transition flex flex-col items-center gap-1">
+                    <span class="w-10 h-10 rounded-lg bg-amber-400 text-stone-900 font-bold text-lg flex items-center justify-center">🚸</span>
+                    <span class="text-[11px]">Yellow Crossing</span>
+                  </button>
+                  <button onclick="checkRoadSign('bicycle')" class="p-3 rounded-xl bg-white/10 hover:bg-white/20 transition flex flex-col items-center gap-1">
+                    <span class="w-10 h-10 rounded-full bg-sky-500 text-white font-bold text-lg flex items-center justify-center">🚲</span>
+                    <span class="text-[11px]">Blue Circle</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 space-y-4">
+            <div class="p-5 sm:p-6 rounded-3xl bg-cream border border-stone-200">
+              <h3 class="font-display text-2xl font-bold text-ink mb-2">Real-World Street Smarts</h3>
+              <p id="traffic-age-guidance" class="text-sm sm:text-base text-ink/90 leading-relaxed mb-4">
+                Always hold an adult's hand near roads, stop at the curb, look LEFT, look RIGHT, and look LEFT again before stepping onto a crosswalk—even when the green walk signal is on!
+              </p>
+              <div id="traffic-feedback-box" class="p-3.5 rounded-2xl bg-sageLight text-sage text-sm font-medium">
+                Tip: Try changing the traffic light and testing when it is safe to cross!
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-ochreLight/70 border border-ochre/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-ink">Car-Ride Road Sign Bingo PDF</div>
+                <div class="text-xs text-muted">Printable Bingo Cards &amp; Home Floor Road Signs</div>
+              </div>
+              <button onclick="openVaultModal('02_Ages_5-7')" class="px-3.5 py-2 rounded-xl bg-ochre text-ink font-semibold text-xs tactile-btn shrink-0">
+                Preview &amp; Print Free Sheet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORLD 4: DAILY HYGIENE & BODY AWARENESS -->
+      <div id="world-panel-hygiene" class="world-panel hidden bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/90 tactile-card">
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7 space-y-4">
+            <!-- Daily Hygiene Checklist Builder -->
+            <div class="rounded-3xl bg-sageLight/70 border-2 border-sage/20 p-5 sm:p-6">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="font-display text-xl font-bold text-ink">Interactive Daily Hygiene &amp; Germ-Buster Routine</h3>
+                <span id="hygiene-progress-text" class="text-xs font-bold px-3 py-1 rounded-full bg-sage text-white">0 / 4 Completed</span>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-3">
+                <button onclick="toggleHygieneTask(this, 'brush')" class="hygiene-task p-3.5 rounded-2xl bg-white border-2 border-stone-200 text-left flex items-center gap-3 transition">
+                  <span class="text-2xl">🪥</span>
+                  <div>
+                    <div class="font-display font-bold text-sm text-ink">Brush Teeth (2 Mins)</div>
+                    <div class="text-xs text-muted">Morning &amp; before bedtime</div>
+                  </div>
+                </button>
+
+                <button onclick="toggleHygieneTask(this, 'wash')" class="hygiene-task p-3.5 rounded-2xl bg-white border-2 border-stone-200 text-left flex items-center gap-3 transition">
+                  <span class="text-2xl">🧼</span>
+                  <div>
+                    <div class="font-display font-bold text-sm text-ink">20-Sec Soap Handwash</div>
+                    <div class="text-xs text-muted">Before meals &amp; after play</div>
+                  </div>
+                </button>
+
+                <button onclick="toggleHygieneTask(this, 'water')" class="hygiene-task p-3.5 rounded-2xl bg-white border-2 border-stone-200 text-left flex items-center gap-3 transition">
+                  <span class="text-2xl">💧</span>
+                  <div>
+                    <div class="font-display font-bold text-sm text-ink">Drink Fresh Water</div>
+                    <div class="text-xs text-muted">Keeps brain &amp; muscles energized</div>
+                  </div>
+                </button>
+
+                <button onclick="toggleHygieneTask(this, 'sleep')" class="hygiene-task p-3.5 rounded-2xl bg-white border-2 border-stone-200 text-left flex items-center gap-3 transition">
+                  <span class="text-2xl">😴</span>
+                  <div>
+                    <div class="font-display font-bold text-sm text-ink">Screen-Free Wind-Down</div>
+                    <div class="text-xs text-muted">30 mins of reading or calm play</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Body Awareness & Boundaries Card -->
+            <div class="rounded-3xl bg-terracottaLight/60 border-2 border-terracotta/20 p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xl">🛡️</span>
+                <h4 class="font-display font-bold text-lg text-ink">Body Awareness &amp; Personal Boundaries</h4>
+              </div>
+              <p id="body-awareness-text" class="text-xs sm:text-sm text-ink/90 leading-relaxed">
+                <strong>My Body Belongs to Me:</strong> Every child has the right to feel safe and respected. You can always say "No, thank you" to unwanted hugs or tickles, and always tell a trusted parent or teacher if anything ever makes you feel uncomfortable or confused.
+              </p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 space-y-4">
+            <div class="p-5 sm:p-6 rounded-3xl bg-cream border border-stone-200">
+              <span class="text-xs font-bold uppercase tracking-wider text-sage">Why Habits Matter</span>
+              <h3 id="hygiene-science-title" class="font-display text-2xl font-bold text-ink mt-1 mb-2">How Soap Beats Germs</h3>
+              <p id="hygiene-science-desc" class="text-sm sm:text-base text-ink/90 leading-relaxed mb-4">
+                Tiny invisible germs stick to natural oils on our hands. Water alone slides right over them, but scrubbing with soap for 20 seconds breaks germs apart and washes them safely down the drain!
+              </p>
+              <div class="p-3.5 rounded-2xl bg-white border border-stone-200/80 text-xs sm:text-sm font-medium text-ink">
+                💡 <strong>20-Second Trick:</strong> Hum "Happy Birthday" twice while scrubbing between your fingers and under your nails!
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-ochreLight/70 border border-ochre/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-ink">Printable Bathroom Routine Chart</div>
+                <div class="text-xs text-muted">Morning/Night Visual Tracker &amp; Body Safety Guide</div>
+              </div>
+              <button onclick="openVaultModal('01_Ages_2-4')" class="px-3.5 py-2 rounded-xl bg-ochre text-ink font-semibold text-xs tactile-btn shrink-0">
+                Preview &amp; Print Free Sheet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: BRANCHING MORAL STORIES -->
+  <section id="stories" class="py-12 sm:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-terracotta">Social-Emotional Learning (SEL)</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-ink mt-1">Interactive Moral Stories: "Choose Your Action"</h2>
+          <p class="text-sm sm:text-base text-muted mt-1 max-w-2xl">
+            Instead of lecturing kids, let them step into the character's shoes, make real choices, and see gentle emotional consequences.
+          </p>
+        </div>
+
+        <!-- Story Selector -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="loadStory(0)" id="story-btn-0" class="story-selector px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition">1. The Lost Lunchbox</button>
+          <button onclick="loadStory(1)" id="story-btn-1" class="story-selector px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition">2. The Playground Swing</button>
+          <button onclick="loadStory(2)" id="story-btn-2" class="story-selector px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition">3. The Whisper on the Bus</button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/90 tactile-card">
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          <!-- Story Scene & Choices -->
+          <div class="lg:col-span-7 space-y-5">
+            <div class="flex items-center justify-between gap-2">
+              <span id="story-theme-badge" class="px-3 py-1 rounded-full bg-terracottaLight text-terracotta text-xs font-bold">Theme: Honesty &amp; Empathy</span>
+              <button onclick="speakCurrentStory()" class="px-3.5 py-1.5 rounded-xl bg-sageLight text-sage text-xs font-semibold hover:bg-sage hover:text-white transition flex items-center gap-1.5">
+                <span>🔊 Listen to Story</span>
+              </button>
+            </div>
+
+            <h3 id="story-title" class="font-display text-2xl sm:text-3xl font-bold text-ink">The Lost Lunchbox</h3>
+
+            <div class="p-5 rounded-2xl bg-cream border border-stone-200/80 text-base sm:text-lg text-ink leading-relaxed">
+              <p id="story-narrative">
+                Maya finds a shiny blue lunchbox left beside the school bench. Inside is a delicious-looking chocolate muffin and a brand-new sticker sheet. Nobody else is around. What should Maya do?
+              </p>
+            </div>
+
+            <!-- Interactive Choices -->
+            <div id="story-choices-container" class="space-y-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Emotional Outcome & Parent Table-Talk Card -->
+          <div class="lg:col-span-5 space-y-4">
+            <div id="story-outcome-card" class="p-6 rounded-3xl bg-skyLight/60 border border-sky/20">
+              <div class="text-xs font-bold uppercase tracking-wider text-sky mb-1">Reflection &amp; Outcome</div>
+              <h4 id="story-outcome-title" class="font-display text-xl font-bold text-ink mb-2">Choose an action on the left to see what happens!</h4>
+              <p id="story-outcome-text" class="text-sm text-ink/90 leading-relaxed mb-4">
+                Every decision shapes how others feel and builds our inner character.
+              </p>
+              <div class="p-4 rounded-2xl bg-white border border-stone-200/80">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-terracotta mb-1">Bedtime Table-Talk Question for Parents</div>
+                <p id="story-parent-prompt" class="text-xs sm:text-sm font-medium text-ink">
+                  "Have you ever lost something special? How did it feel when someone helped you find it?"
+                </p>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-ochreLight/70 border border-ochre/30 flex items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-ink">25 Printable Moral Mini-Books</div>
+                <div class="text-xs text-muted">Foldable bedtime booklets + Discussion Deck</div>
+              </div>
+              <button onclick="openVaultModal('02_Ages_5-7')" class="px-3.5 py-2 rounded-xl bg-ochre text-ink font-semibold text-xs tactile-btn shrink-0">
+                Sample Story PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: SMART MONTESSORI FLASHCARDS -->
+  <section id="flashcards" class="py-12 sm:py-16 bg-sand/60 border-y border-stone-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-sky">Dual-Coding &amp; Active Recall</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-ink mt-1">Smart Montessori 3-Part Flashcards</h2>
+          <p class="text-sm sm:text-base text-muted mt-1 max-w-2xl">
+            Click the card to flip between the visual prompt and the age-adapted explanation. Switch decks below!
+          </p>
+        </div>
+
+        <!-- Deck Category Pills -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="selectFlashcardDeck('animals')" id="deck-btn-animals" class="deck-btn px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition">🐾 Animals &amp; Nature</button>
+          <button onclick="selectFlashcardDeck('space')" id="deck-btn-space" class="deck-btn px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition">🪐 Space &amp; Science</button>
+          <button onclick="selectFlashcardDeck('safety')" id="deck-btn-safety" class="deck-btn px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition">🚦 Signs &amp; Safety</button>
+          <button onclick="selectFlashcardDeck('emotions')" id="deck-btn-emotions" class="deck-btn px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition">💛 Emotions &amp; Body</button>
+        </div>
+      </div>
+
+      <div class="max-w-2xl mx-auto">
+        <!-- 3D Flip Card -->
+        <div onclick="flipFlashcard()" class="perspective-1000 cursor-pointer select-none">
+          <div id="flashcard-inner" class="preserve-3d relative w-full h-80 sm:h-96">
+            <!-- Front Face -->
+            <div class="backface-hidden absolute inset-0 bg-white rounded-3xl p-6 sm:p-8 border-2 border-stone-200 tactile-card flex flex-col items-center justify-between text-center">
+              <div class="w-full flex items-center justify-between text-xs font-bold text-muted">
+                <span id="fc-counter" class="px-3 py-1 rounded-full bg-sand">Card 1 of 4</span>
+                <span id="fc-tier-label" class="px-3 py-1 rounded-full bg-skyLight text-sky">Tier: Ages 5–7</span>
+              </div>
+
+              <div class="my-auto">
+                <div id="fc-emoji" class="text-7xl sm:text-8xl mb-4 animate-float">🦉</div>
+                <h3 id="fc-front-title" class="font-display text-3xl sm:text-4xl font-bold text-ink">Barn Owl</h3>
+                <p id="fc-front-hint" class="text-xs sm:text-sm text-muted mt-1">Tap card to flip &amp; discover!</p>
+              </div>
+
+              <div class="text-xs font-semibold text-sage">↻ Click anywhere on card to flip</div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="backface-hidden rotate-y-180 absolute inset-0 bg-sage text-white rounded-3xl p-6 sm:p-8 border-2 border-sage tactile-card flex flex-col items-center justify-between text-center">
+              <div class="w-full flex items-center justify-between text-xs font-bold">
+                <span class="px-3 py-1 rounded-full bg-white/15">Control Card Answer</span>
+                <button onclick="event.stopPropagation(); speakFlashcard();" class="px-3 py-1 rounded-full bg-white text-sage font-bold hover:bg-cream transition">
+                  🔊 Speak
+                </button>
+              </div>
+
+              <div class="my-auto max-w-lg">
+                <div id="fc-back-label" class="font-display text-2xl sm:text-3xl font-bold mb-3">Barn Owl (Nocturnal Hunter)</div>
+                <p id="fc-back-text" class="text-sm sm:text-lg leading-relaxed text-white/95">
+                  Barn owls sleep during the day and wake up at night! Their heart-shaped faces funnel tiny sounds to their ears so they can hunt in the dark.
+                </p>
+              </div>
+
+              <div class="text-xs font-semibold text-white/80">↻ Tap to flip back</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard Controls -->
+        <div class="flex items-center justify-between gap-3 mt-5">
+          <button onclick="prevFlashcard()" class="px-5 py-3 rounded-2xl bg-white border border-stone-200 font-display font-semibold text-sm text-ink tactile-btn hover:bg-stone-50">
+            ← Previous
+          </button>
+          <button onclick="speakFlashcard()" class="px-5 py-3 rounded-2xl bg-sky text-white font-display font-semibold text-sm tactile-btn hover:bg-sky/90 flex items-center gap-2">
+            <span>🔊 Hear Pronunciation</span>
+          </button>
+          <button onclick="nextFlashcard()" class="px-5 py-3 rounded-2xl bg-white border border-stone-200 font-display font-semibold text-sm text-ink tactile-btn hover:bg-stone-50">
+            Next Card →
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: THE 20,000-PAGE SCREEN-FREE VAULT & PRESCHOOL / SCHOOL PACKS -->
+  <section id="vault" class="py-14 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-block px-3.5 py-1 rounded-full bg-ochreLight text-ink border border-ochre/40 text-xs font-bold uppercase tracking-wider mb-3">
+          Screen-Free Offline Extension • Instant Digital Download
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-bold text-ink leading-tight">
+          The 20,000-Page Screen-Free Family Vault &amp; <span class="text-sage">School Packs</span>
+        </h2>
+        <p class="text-sm sm:text-base text-muted mt-3 leading-relaxed">
+          Every game and story on WonderWorld Kids is 100% free forever. When you want to unplug at restaurants, during travel, at bedtime, or in your preschool classroom, unlock our indexed, print-ready PDF bundles (Full-Color + Ink-Saver B&amp;W, A4 + US Letter).
+        </p>
+      </div>
+
+      <!-- 3-Tier Pricing & School Pack Cards -->
+      <div class="grid lg:grid-cols-3 gap-7 items-stretch mb-12">
+        <!-- Tier 1: Age-Band Mega Pack -->
+        <div class="bg-white rounded-3xl p-7 border border-stone-200 tactile-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-skyLight text-sky text-xs font-bold">Single Age Tier</span>
+              <span class="text-xs font-semibold text-muted">~6,500 Pages</span>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-ink">Age-Band Mastery Pack</h3>
+            <p class="text-xs sm:text-sm text-muted mt-1">Choose Ages 2–4, Ages 5–7, or Ages 8–11. Tailored specifically to your child's current stage.</p>
+            <div class="my-5 flex items-baseline gap-2">
+              <span class="font-display text-4xl font-bold text-ink">$24</span>
+              <span class="text-xs text-muted">one-time • instant download</span>
+            </div>
+            <ul class="space-y-2.5 text-sm text-ink/90 mb-6">
+              <li class="flex items-start gap-2"><span class="text-sage font-bold">✓</span> Progressive Literacy, Math &amp; Logic Workbooks</li>
+              <li class="flex items-start gap-2"><span class="text-sage font-bold">✓</span> Farm, Space, Traffic &amp; Hygiene Craft Packs</li>
+              <li class="flex items-start gap-2"><span class="text-sage font-bold">✓</span> Montessori 3-Part Flashcards &amp; Routine Charts</li>
+              <li class="flex items-start gap-2"><span class="text-sage font-bold">✓</span> Both Full-Color &amp; Ink-Saver B&amp;W Editions</li>
+            </ul>
+          </div>
+          <button onclick="triggerBundleCheckout('Age-Band Mastery Pack ($24)')" class="w-full py-3.5 rounded-2xl bg-sky text-white font-display font-semibold text-base tactile-btn hover:bg-sky/90">
+            Get Age-Band Pack — $24
+          </button>
+        </div>
+
+        <!-- Tier 2: Flagship 20,000-Page Family Vault -->
+        <div class="bg-white rounded-3xl p-7 border-2 border-terracotta tactile-card flex flex-col justify-between relative">
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-terracotta text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+            Most Popular for Families
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-terracottaLight text-terracotta text-xs font-bold">All Ages 2–11</span>
+              <span class="text-xs font-semibold text-muted">20,000+ Pages</span>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-ink">Ultimate Screen-Free Family Vault</h3>
+            <p class="text-xs sm:text-sm text-muted mt-1">Grows with your children for 9+ years. Indexed cleanly to match every world on this website.</p>
+            <div class="my-5 flex items-baseline gap-2">
+              <span class="font-display text-4xl font-bold text-ink">$49</span>
+              <span class="text-xs text-muted line-through">$129</span>
+              <span class="text-xs font-semibold text-terracotta">Lifetime Access</span>
+            </div>
+            <ul class="space-y-2.5 text-sm text-ink/90 mb-6">
+              <li class="flex items-start gap-2"><span class="text-terracotta font-bold">✓</span> <strong>All 3 Age Tiers</strong> (Ages 2–4, 5–7 &amp; 8–11 included)</li>
+              <li class="flex items-start gap-2"><span class="text-terracotta font-bold">✓</span> 3,500+ Montessori Flashcards &amp; Trivia Decks</li>
+              <li class="flex items-start gap-2"><span class="text-terracotta font-bold">✓</span> 500+ Restaurant/Travel Quiet-Time Puzzle Sheets</li>
+              <li class="flex items-start gap-2"><span class="text-terracotta font-bold">✓</span> 150 Illustrated Moral Story Mini-Books &amp; SEL Kits</li>
+              <li class="flex items-start gap-2"><span class="text-terracotta font-bold">✓</span> A4 + US Letter + Free Lifetime Vault Updates</li>
+            </ul>
+          </div>
+          <button onclick="triggerBundleCheckout('Ultimate 20,000-Page Family Vault ($49)')" class="w-full py-3.5 rounded-2xl bg-terracotta text-white font-display font-semibold text-base tactile-btn hover:bg-terracotta/90">
+            Unlock Full 20,000-Page Vault — $49
+          </button>
+        </div>
+
+        <!-- Tier 3: Preschool & School Classroom Packs -->
+        <div class="bg-sage text-white rounded-3xl p-7 border-2 border-sage tactile-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold">Educators &amp; Co-ops</span>
+              <span class="text-xs font-semibold text-white/80">30-Student License</span>
+            </div>
+            <h3 class="font-display text-2xl font-bold">Preschool &amp; School Classroom Packs</h3>
+            <p class="text-xs sm:text-sm text-white/85 mt-1">Built for Montessori preschools, kindergarten teachers, homeschool co-ops, and primary schools.</p>
+            <div class="my-5 flex items-baseline gap-2">
+              <span class="font-display text-4xl font-bold">$119</span>
+              <span class="text-xs text-white/80">multi-student classroom license</span>
+            </div>
+            <ul class="space-y-2.5 text-sm text-white/95 mb-6">
+              <li class="flex items-start gap-2"><span class="text-ochre font-bold">✓</span> Full 20,000-Page Vault + <strong>30-Student Print License</strong></li>
+              <li class="flex items-start gap-2"><span class="text-ochre font-bold">✓</span> <strong>Weekly Teacher Lesson Plans</strong> &amp; Circle-Time Guides</li>
+              <li class="flex items-start gap-2"><span class="text-ochre font-bold">✓</span> Large-Format Classroom Wall Posters (Traffic, Hygiene, Space)</li>
+              <li class="flex items-start gap-2"><span class="text-ochre font-bold">✓</span> Group Activity Station Cards &amp; Student Certificates</li>
+              <li class="flex items-start gap-2"><span class="text-ochre font-bold">✓</span> School Invoice / Purchase Order Ready</li>
+            </ul>
+          </div>
+          <button onclick="triggerBundleCheckout('Preschool & School Classroom Pack ($119)')" class="w-full py-3.5 rounded-2xl bg-ochre text-ink font-display font-semibold text-base tactile-btn hover:bg-ochre/90">
+            Get School Classroom Pack — $119
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Folder Inspector Banner -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 tactile-card flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+        <div class="space-y-1.5 text-center md:text-left">
+          <span class="text-xs font-bold uppercase tracking-wider text-sage">No Messy ZIP Overwhelm</span>
+          <h3 class="font-display text-2xl font-bold text-ink">Inspect the Indexed Folder Structure &amp; Print Free Samples</h3>
+          <p class="text-sm text-muted max-w-2xl">
+            Browse the exact folder hierarchy inside the 20,000-Page Vault and School Packs, and print sample worksheets right now.
+          </p>
+        </div>
+        <button onclick="openVaultModal('04_Preschool_and_School_Packs')" class="px-6 py-3.5 rounded-2xl bg-sage text-white font-display font-semibold text-base tactile-btn hover:bg-sage/90 shrink-0">
+          📂 Open Interactive Vault Explorer
+        </button>
+      </div>
+
+      <!-- Homepage Bridge Banner Snippet Generator (For Site Owner to paste into index.html) -->
+      <div class="bg-sand/90 rounded-3xl p-6 sm:p-8 border border-stone-300/80">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-full bg-white text-sage border border-sage/30 text-[11px] font-bold uppercase tracking-wider mb-1">
+              Site Owner Integration Helper
+            </span>
+            <h3 class="font-display text-xl sm:text-2xl font-bold text-ink">Connect Your Existing <code class="text-terracotta">index.html</code> to This Add-On Page</h3>
+            <p class="text-xs sm:text-sm text-muted mt-0.5">
+              Copy this clean HTML Bridge Banner onto your existing <code class="font-mono text-ink">index.html</code>. Notice how links like <code class="font-mono text-ink">explore.html?age=5-7&amp;world=space#worlds</code> automatically open the right age tier and world!
+            </p>
+          </div>
+          <button onclick="copyBridgeSnippet()" class="px-4 py-2.5 rounded-xl bg-ink text-white font-semibold text-xs sm:text-sm tactile-btn hover:bg-ink/90 shrink-0 flex items-center gap-2">
+            <span>📋 Copy HTML Snippet for index.html</span>
+          </button>
+        </div>
+
+        <pre id="bridge-snippet-code" class="bg-slate-900 text-emerald-300 p-4 rounded-2xl text-xs font-mono overflow-x-auto leading-relaxed border border-slate-700">&lt;!-- WonderWorld Kids Add-On Hub Bridge Banner (Paste into index.html) --&gt;
+&lt;section style="max-width:1100px;margin:2rem auto;padding:1.75rem;border-radius:24px;background:#FDF5E2;border:2px solid #E5A93B;font-family:sans-serif;"&gt;
+  &lt;div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;"&gt;
+    &lt;div&gt;
+      &lt;span style="font-size:12px;font-weight:700;text-transform:uppercase;color:#4D7C6F;"&gt;New • Ages 2–11 Interactive Hub + 20,000+ Printables&lt;/span&gt;
+      &lt;h2 style="margin:6px 0;font-size:24px;color:#2A2F33;"&gt;Explore Animal Farm, Space, Traffic Safety &amp; Moral Stories&lt;/h2&gt;
+      &lt;p style="margin:0;font-size:14px;color:#5E666E;"&gt;100% free interactive worlds online + Screen-Free PDF Vault &amp;amp; Preschool Classroom Packs.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div style="display:flex;flex-wrap:wrap;gap:10px;"&gt;
+      &lt;a href="explore.html?age=2-4#worlds" style="padding:10px 16px;border-radius:12px;background:#4D7C6F;color:#fff;text-decoration:none;font-weight:600;font-size:14px;"&gt;Ages 2–4 Worlds&lt;/a&gt;
+      &lt;a href="explore.html?age=5-7#worlds" style="padding:10px 16px;border-radius:12px;background:#D96B43;color:#fff;text-decoration:none;font-weight:600;font-size:14px;"&gt;Ages 5–7 Worlds&lt;/a&gt;
+      &lt;a href="explore.html?age=8-11#vault" style="padding:10px 16px;border-radius:12px;background:#2A2F33;color:#fff;text-decoration:none;font-weight:600;font-size:14px;"&gt;20,000+ PDF Vault&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-ink text-stone-300 py-10 border-t border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <a href="index.html" class="font-display text-xl font-bold text-white hover:opacity-90">WonderWorld <span class="text-terracotta">Kids</span></a>
+        <p class="text-xs text-stone-400 mt-1">Free interactive worlds for ages 2–11 • Screen-free PDF Mega-Vault &amp; School Packs.</p>
+      </div>
+      <div class="flex flex-wrap gap-4 text-xs font-medium">
+        <a href="index.html" class="text-white hover:text-ochre font-semibold">← Back to Main Home (index.html)</a>
+        <a href="#worlds" class="hover:text-white">Interactive Worlds</a>
+        <a href="#stories" class="hover:text-white">Moral Stories</a>
+        <a href="#flashcards" class="hover:text-white">Flashcards</a>
+        <button onclick="openVaultModal('04_Preschool_and_School_Packs')" class="text-ochre hover:underline">School Packs &amp; Free Sample</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: INTERACTIVE 20,000-PAGE VAULT & SCHOOL PACKS FOLDER EXPLORER + PRINTABLE SAMPLE -->
+  <div id="vault-modal" class="fixed inset-0 z-50 hidden bg-ink/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-4xl w-full p-6 sm:p-8 border border-stone-200 shadow-2xl my-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-stone-200">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-sage">Indexed Digital Library Preview</span>
+          <h3 class="font-display text-2xl font-bold text-ink">Inside the 20,000-Page Vault &amp; School Packs</h3>
+        </div>
+        <button onclick="closeVaultModal()" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center font-bold text-ink">✕</button>
+      </div>
+
+      <div class="grid md:grid-cols-12 gap-6 mt-5">
+        <!-- Folder Tree -->
+        <div class="md:col-span-5 space-y-2">
+          <div class="text-xs font-bold uppercase tracking-wider text-muted mb-2">Select Vault Folder:</div>
+          <button onclick="selectVaultFolder('01_Ages_2-4')" id="folder-01_Ages_2-4" class="vault-folder-btn w-full text-left p-3 rounded-2xl border text-xs sm:text-sm font-semibold transition">
+            📁 01_Ages_2-4_Little_Explorers (6,200 pgs)
+          </button>
+          <button onclick="selectVaultFolder('02_Ages_5-7')" id="folder-02_Ages_5-7" class="vault-folder-btn w-full text-left p-3 rounded-2xl border text-xs sm:text-sm font-semibold transition">
+            📁 02_Ages_5-7_Curious_Builders (7,100 pgs)
+          </button>
+          <button onclick="selectVaultFolder('03_Ages_8-11')" id="folder-03_Ages_8-11" class="vault-folder-btn w-full text-left p-3 rounded-2xl border text-xs sm:text-sm font-semibold transition">
+            📁 03_Ages_8-11_Junior_Navigators (6,700 pgs)
+          </button>
+          <button onclick="selectVaultFolder('04_Preschool_and_School_Packs')" id="folder-04_Preschool_and_School_Packs" class="vault-folder-btn w-full text-left p-3 rounded-2xl border text-xs sm:text-sm font-semibold transition">
+            🏫 04_Preschool_and_School_Packs (Teacher Guides)
+          </button>
+        </div>
+
+        <!-- Printable Sample Sheet Preview -->
+        <div class="md:col-span-7">
+          <div id="printable-sheet-area" class="rounded-2xl border-2 border-dashed border-stone-300 bg-cream p-5">
+            <div class="flex items-center justify-between border-b border-stone-300 pb-2 mb-3">
+              <span class="font-display font-bold text-sm text-ink">WonderWorld Kids • Free Printable Sample</span>
+              <span id="sample-sheet-code" class="text-[11px] font-mono text-muted">A4 / US Letter Ready</span>
+            </div>
+            <h4 id="sample-sheet-title" class="font-display text-xl font-bold text-ink mb-1">Daily Hygiene &amp; Morning Routine Chart</h4>
+            <p id="sample-sheet-desc" class="text-xs text-muted mb-3">Print &amp; place on the bathroom mirror. Let your child check off each healthy habit!</p>
+
+            <div id="sample-sheet-content" class="bg-white rounded-xl p-4 border border-stone-200 space-y-2.5 text-sm">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 mt-4">
+            <button onclick="window.print()" class="px-4 py-2.5 rounded-xl bg-sage text-white font-semibold text-xs sm:text-sm tactile-btn flex items-center gap-1.5">
+              <span>🖨️ Print This Free Sample Sheet</span>
+            </button>
+            <button onclick="closeVaultModal(); document.getElementById('vault').scrollIntoView();" class="px-4 py-2.5 rounded-xl bg-terracotta text-white font-semibold text-xs sm:text-sm tactile-btn">
+              Unlock Full Bundle →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. STATE & AGE-BAND PEDAGOGY ENGINE
+    // ==========================================
+    let currentAgeBand = '5-7'; // '2-4' | '5-7' | '8-11'
+    let currentWorldKey = 'farm';
+    let ttsEnabled = false;
+    let currentFarmKey = 'cow';
+    let currentPlanetKey = 'earth';
+    let trafficLightState = 'red'; // 'red' (cars stop -> safe) | 'green' (cars go -> wait)
+    let trafficScore = 0;
+    let hygieneCompleted = new Set();
+    let currentStoryIndex = 0;
+    let currentDeckKey = 'animals';
+    let currentCardIndex = 0;
+
+    const AGE_CONFIG = {
+      '2-4': {
+        label: 'Ages 2–4 (Little Explorers)',
+        badge: 'Sensory sounds, real photos & zero-reading required',
+        pill: 'Tier: Ages 2–4',
+        trafficGuidance: 'Hold a grown-up’s hand tightly near every road. Red means STOP at the curb; Green walk signal means look both ways with your grown-up before walking!'
+      },
+      '5-7': {
+        label: 'Ages 5–7 (Curious Builders)',
+        badge: 'Interactive cause-and-effect, phonics & rule-based play',
+        pill: 'Tier: Ages 5–7',
+        trafficGuidance: 'Always stop at the curb, look LEFT, look RIGHT, and look LEFT again before stepping onto a crosswalk—even when the green walk signal is on!'
+      },
+      '8-11': {
+        label: 'Ages 8–11 (Junior Navigators)',
+        badge: 'Real-world systems, ethics, trivia & independent quests',
+        pill: 'Tier: Ages 8–11',
+        trafficGuidance: 'Watch for turning vehicles, bicycle lanes, and driver blind spots. Make eye contact with drivers before crossing and remove headphones near intersections.'
+      }
+    };
+
+    // ==========================================
+    // 2. URL PARAMETER & HASH SYNCHRONIZATION
+    // ==========================================
+    function syncUrlParams() {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('age', currentAgeBand);
+        url.searchParams.set('world', currentWorldKey);
+        window.history.replaceState({}, '', url.toString());
+      } catch (e) {
+        // Ignore history restrictions in sandboxed environments
+      }
+    }
+
+    function applyInitialUrlState() {
+      const params = new URLSearchParams(window.location.search);
+      const urlAge = params.get('age');
+      const urlWorld = params.get('world');
+      const validAges = ['2-4', '5-7', '8-11'];
+      const validWorlds = ['farm', 'space', 'traffic', 'hygiene'];
+
+      const initialAge = validAges.includes(urlAge) ? urlAge : '5-7';
+      const initialWorld = validWorlds.includes(urlWorld) ? urlWorld : 'farm';
+
+      setAgeBand(initialAge, false);
+      switchWorld(initialWorld, false);
+      loadStory(0);
+      selectFlashcardDeck('animals');
+
+      // Smoothly scroll to #hash target (e.g., #vault, #worlds, #stories, #flashcards) if provided
+      if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) {
+          setTimeout(() => {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }, 120);
+        }
+      }
+    }
+
+    // ==========================================
+    // 3. WEB AUDIO API (GENTLE SOUND EFFECTS)
+    // ==========================================
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.25, slideTo = null) {
+      try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        if (slideTo) {
+          osc.frequency.exponentialRampToValueAtTime(slideTo, ctx.currentTime + duration);
+        }
+        gain.gain.setValueAtTime(0.14, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {
+        // Ignore audio restrictions if blocked
+      }
+    }
+
+    function playAnimalSynth(key) {
+      if (key === 'cow') playTone(145, 'sawtooth', 0.55, 115);
+      else if (key === 'chicken') { playTone(520, 'triangle', 0.12, 620); setTimeout(() => playTone(480, 'triangle', 0.15, 380), 140); }
+      else if (key === 'sheep') playTone(310, 'sawtooth', 0.45, 270);
+      else if (key === 'bee') playTone(240, 'sawtooth', 0.4, 290);
+      else if (key === 'tractor') playTone(85, 'square', 0.45, 110);
+    }
+
+    // ==========================================
+    // 4. WEB SPEECH API (READ ALOUD NARRATION)
+    // ==========================================
+    function toggleReadAloud() {
+      ttsEnabled = !ttsEnabled;
+      const indicator = document.getElementById('tts-indicator');
+      const label = document.getElementById('tts-label');
+      if (ttsEnabled) {
+        indicator.className = 'w-2.5 h-2.5 rounded-full bg-sage animate-pulse';
+        label.textContent = 'Read Aloud: On';
+        speakText('Read Aloud mode is now on! Tap any animal, story, or flashcard to hear it spoken.');
+        showToast('🔊 Read Aloud narration enabled');
+      } else {
+        indicator.className = 'w-2.5 h-2.5 rounded-full bg-stone-300';
+        label.textContent = 'Read Aloud: Off';
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        showToast('Read Aloud narration turned off');
+      }
+    }
+
+    function speakText(text, force = false) {
+      if (!ttsEnabled && !force) return;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = currentAgeBand === '2-4' ? 0.88 : 0.96;
+        utter.pitch = 1.05;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    // ==========================================
+    // 5. DATA MODULES (ADAPTED BY AGE BAND)
+    // ==========================================
+    const FARM_DATA = {
+      cow: {
+        emoji: '🐄',
+        title: 'Dairy Cow',
+        sound: 'Sound: "Moooo!"',
+        chain: '🌱 Grass & Clover → 🐄 Cow → 🥛 Milk → 🧀 Cheese',
+        desc: {
+          '2-4': 'The big gentle cow says "Moooo!" Cows love munching green grass and give us white milk to drink.',
+          '5-7': 'Cows eat fresh grass and hay. They give us nutritious milk, which farmers and cheesemakers turn into yogurt, butter, and cheese!',
+          '8-11': 'Dairy cows have a specialized four-chambered stomach that digests tough pasture grass, converting plant energy into calcium- and protein-rich milk.'
+        }
+      },
+      chicken: {
+        emoji: '🐓',
+        title: 'Barn Hen',
+        sound: 'Sound: "Cluck-cluck!"',
+        chain: '🌾 Seeds & Bugs → 🐓 Hen → 🥚 Fresh Eggs → 🍳 Breakfast',
+        desc: {
+          '2-4': 'The speckled hen says "Cluck-cluck!" She lays cozy eggs in her straw nest.',
+          '5-7': 'Hens scratch the soil for seeds and insects. A healthy hen lays almost one fresh egg every single day!',
+          '8-11': 'Chickens are omnivorous ground birds that naturally control farm pests while aerating topsoil and producing nutrient-dense eggs.'
+        }
+      },
+      sheep: {
+        emoji: '🐑',
+        title: 'Woolly Sheep',
+        sound: 'Sound: "Baaaa!"',
+        chain: '🐑 Fluffy Fleece → ✂️ Spring Haircut → 🧶 Yarn → 🧥 Warm Sweater',
+        desc: {
+          '2-4': 'Soft, fluffy sheep say "Baaaa!" Their thick woolly coat keeps them warm like a cozy blanket.',
+          '5-7': 'Every spring, farmers give sheep a gentle haircut called shearing. The soft wool is spun into yarn to knit warm winter sweaters and socks!',
+          '8-11': 'Sheep wool is a renewable, biodegradable natural fiber that regulates temperature and repels moisture far better than synthetic plastics.'
+        }
+      },
+      bee: {
+        emoji: '🐝',
+        title: 'Honey Bee',
+        sound: 'Sound: "Bzzzzz!"',
+        chain: '🌸 Blossom Pollen → 🐝 Honey Bee → 🍎 Orchard Fruit & 🍯 Honey',
+        desc: {
+          '2-4': 'Busy little bees go "Bzzzz!" from flower to flower and make sweet golden honey.',
+          '5-7': 'Bees carry yellow pollen between flowers. Without busy honey bees, apple trees, strawberries, and pumpkins could not grow fruit!',
+          '8-11': 'Honey bees are keystone pollinators responsible for pollinating over one-third of the crops humans eat, while storing nectar as honeycomb.'
+        }
+      },
+      tractor: {
+        emoji: '🚜',
+        title: 'Harvest Tractor & Soil',
+        sound: 'Sound: "Chug-chug-vroom!"',
+        chain: '🚜 Healthy Soil + Seeds → 🌧️ Sun & Rain → 🥕 Vegetables & Wheat',
+        desc: {
+          '2-4': 'Big wheels go round and round! The farmer drives the tractor to plant seeds in the soil.',
+          '5-7': 'Tractors help farmers plant rows of seeds, water thirsty crops, and harvest wheat, carrots, and corn to feed families.',
+          '8-11': 'Modern sustainable farms use precision tractors and crop rotation to protect topsoil nutrients and conserve groundwater.'
+        }
+      }
+    };
+
+    const SPACE_DATA = {
+      sun: {
+        title: 'The Sun (Our Star)',
+        stat: '109× Wider than Earth • Star',
+        desc: {
+          '2-4': 'The bright yellow Sun wakes up the daytime sky and keeps Earth warm and cozy!',
+          '5-7': 'The Sun is a giant glowing star at the center of our Solar System. Its light helps green plants grow and gives Earth warmth.',
+          '8-11': 'The Sun contains 99.8% of our Solar System’s mass. Nuclear fusion in its core converts hydrogen into the radiant energy driving Earth’s climate.'
+        },
+        challenge: 'Look at your shadow outside in the morning and at noon—how does it change?'
+      },
+      earth: {
+        title: 'Planet Earth',
+        stat: '1 Moon • 365-Day Orbit',
+        desc: {
+          '2-4': 'Earth is our home! It has big blue oceans, green forests, and fluffy white clouds.',
+          '5-7': 'Earth is our home planet! It is the only known planet with liquid water oceans on its surface and breathable air for living things.',
+          '8-11': 'Earth orbits inside the Sun’s habitable "Goldilocks Zone," protected by a magnetic field and ozone layer that shield life from solar radiation.'
+        },
+        challenge: 'Can you spot the Moon tonight and draw its shape in a notebook?'
+      },
+      mars: {
+        title: 'Mars (The Red Planet)',
+        stat: '2 Moons • Robotic Rovers',
+        desc: {
+          '2-4': 'Mars is a dusty red planet! Robot rovers roll across its rocks taking pictures.',
+          '5-7': 'Mars looks rusty red because its soil is full of iron oxide. Scientists send solar-powered robot rovers to explore its giant volcanoes and canyons!',
+          '8-11': 'Mars hosts Olympus Mons—the tallest volcano in the Solar System—and ancient riverbeds proving liquid water once flowed on its surface.'
+        },
+        challenge: 'Design your own Mars Rover on paper with wheels, cameras, and solar panels!'
+      },
+      saturn: {
+        title: 'Saturn (Ringed Giant)',
+        stat: '146+ Moons • Ice Rings',
+        desc: {
+          '2-4': 'Saturn wears sparkling rings made of shiny ice chunks and space dust!',
+          '5-7': 'Saturn is a huge gas giant surrounded by thousands of dazzling rings made of billions of pieces of ice and rock.',
+          '8-11': 'Saturn’s density is lower than water, and its iconic rings span 282,000 km wide yet average less than 10 meters thick.'
+        },
+        challenge: 'Build a paper-plate Saturn craft with cut-out rings!'
+      }
+    };
+
+    const STORIES_DATA = [
+      {
+        theme: 'Theme: Honesty & Empathy',
+        title: 'The Lost Lunchbox',
+        narrative: 'Maya finds a shiny blue lunchbox left beside the school bench. Inside is a delicious chocolate muffin and a brand-new sticker sheet. Nobody else is around. What should Maya do?',
+        parentPrompt: 'Have you ever lost something special? How did it feel when someone helped you find it?',
+        choices: [
+          {
+            label: 'A. Take it to the teacher’s Lost & Found desk right away.',
+            outcomeTitle: 'Kindness & Trust in Action!',
+            outcomeText: 'Ten minutes later, Leo from Grade 1 comes running in tears—his grandma packed that muffin for his birthday! When the teacher hands him the lunchbox, Leo beams with relief and thanks Maya.'
+          },
+          {
+            label: 'B. Keep the stickers and leave the empty lunchbox on the bench.',
+            outcomeTitle: 'How Would That Feel?',
+            outcomeText: 'When Leo finds his lunchbox missing its birthday stickers, his shoulders slump in sadness. Maya realizes that keeping something that belongs to someone else hurts their heart—and decides to return them and apologize.'
+          }
+        ]
+      },
+      {
+        theme: 'Theme: Fairness & Inclusion',
+        title: 'The Playground Swing',
+        narrative: 'There is only one swing left at the park. Sam has been swinging for 15 minutes, and younger sibling Mia is waiting quietly by the fence hoping for a turn. What is the fairest choice?',
+        parentPrompt: 'How can we make sure everyone gets a fair turn when we share toys or swings?',
+        choices: [
+          {
+            label: 'A. Count 10 more big pushes, then hop off and invite Mia on.',
+            outcomeTitle: 'Generosity Multiplies Fun!',
+            outcomeText: 'Mia’s face lights up! She asks Sam to push her gently, and soon both kids are laughing together and taking turns.'
+          },
+          {
+            label: 'B. Keep swinging and pretend not to see Mia waiting.',
+            outcomeTitle: 'Missed Friendship Opportunity',
+            outcomeText: 'Mia walks away feeling left out, and swinging alone stops feeling fun. Taking turns turns a solo game into a shared friendship.'
+          }
+        ]
+      },
+      {
+        theme: 'Theme: Digital & Social Kindness',
+        title: 'The Whisper on the Bus',
+        narrative: 'On the school bus, two kids start whispering and giggling about a new student’s homemade sweater. They look at Noah to see if he will laugh along. What should Noah do?',
+        parentPrompt: 'Why does it take courage to stand up for someone when others are teasing?',
+        choices: [
+          {
+            label: 'A. Sit next to the new student and compliment their cool backpack.',
+            outcomeTitle: 'True Courage & Empathy!',
+            outcomeText: 'The teasing stops immediately because nobody joined in. The new student smiles gratefully, and Noah makes a great new friend.'
+          },
+          {
+            label: 'B. Laugh along so the group thinks he is cool.',
+            outcomeTitle: 'Words Leave Lasting Marks',
+            outcomeText: 'The new student stares out the window looking hurt. Noah feels a heavy knot in his stomach, realizing real confidence means lifting people up, not putting them down.'
+          }
+        ]
+      }
+    ];
+
+    const FLASHCARD_DECKS = {
+      animals: [
+        { emoji: '🦉', front: 'Barn Owl', backTitle: 'Barn Owl • Nocturnal Bird', text: { '2-4': 'The owl says "Hoo-hoo!" and wakes up at night when the stars come out.', '5-7': 'Barn owls sleep during the day and hunt at night using super-sharp hearing.', '8-11': 'Barn owls have asymmetrical ears and fringed feathers that allow completely silent flight.' } },
+        { emoji: '🐢', front: 'Sea Turtle', backTitle: 'Sea Turtle • Ocean Reptile', text: { '2-4': 'Sea turtles swim smoothly through the blue ocean with big flippers!', '5-7': 'Sea turtles travel thousands of miles in the ocean and return to sandy beaches to lay eggs.', '8-11': 'Sea turtles navigate across entire ocean basins using Earth’s magnetic field as an internal compass.' } },
+        { emoji: '🦋', front: 'Monarch Butterfly', backTitle: 'Monarch • Metamorphosis', text: { '2-4': 'First a tiny caterpillar, then a cozy chrysalis, then a bright orange butterfly!', '5-7': 'Monarch butterflies transform from caterpillars inside a chrysalis and drink flower nectar.', '8-11': 'Monarchs complete a multi-generational 4,800 km migration across North America every autumn.' } },
+        { emoji: '🐙', front: 'Octopus', backTitle: 'Octopus • Invertebrate', text: { '2-4': 'An octopus has eight wiggly arms and lives under the sea!', '5-7': 'Octopuses have eight arms, three hearts, and can change skin color to hide from predators.', '8-11': 'Octopuses possess decentralized nervous systems—two-thirds of their neurons reside in their arms.' } }
+      ],
+      space: [
+        { emoji: '🌕', front: 'Moon Phases', backTitle: 'Earth’s Natural Satellite', text: { '2-4': 'Sometimes the Moon looks like a big round ball, and sometimes like a banana!', '5-7': 'The Moon does not make its own light—it reflects sunlight as it orbits Earth every 29.5 days.', '8-11': 'Moon phases occur due to changing angles between the Sun, Earth, and Moon during its 29.5-day synodic orbit.' } },
+        { emoji: '☄️', front: 'Comet', backTitle: 'Icy Space Traveler', text: { '2-4': 'A comet is like a giant snowball flying through space with a glowing tail!', '5-7': 'Comets are made of ice, dust, and rock. When they fly near the Sun, they grow a bright glowing tail.', '8-11': 'Sublimation of frozen gases creates a comet’s coma and twin ion/dust tails always pointing away from solar wind.' } },
+        { emoji: '🛰️', front: 'Space Station', backTitle: 'International Space Station', text: { '2-4': 'Astronauts float like superheroes inside the space station above Earth!', '5-7': 'Astronauts live and do science experiments in microgravity aboard the Space Station orbiting Earth.', '8-11': 'Orbiting at 28,000 km/h, the ISS circles Earth every 90 minutes, giving astronauts 16 sunrises daily.' } }
+      ],
+      safety: [
+        { emoji: '🛑', front: 'Octagon STOP Sign', backTitle: 'Complete Stop Required', text: { '2-4': 'Red STOP sign means cars and bikes must freeze and stop completely!', '5-7': 'An 8-sided red sign means every vehicle must come to a full stop and check all directions.', '8-11': 'The unique octagonal shape allows drivers and cyclists to recognize a STOP command even from behind or in snow.' } },
+        { emoji: '⛑️', front: 'Bicycle Helmet', backTitle: 'Protect Your Brain', text: { '2-4': 'Snap your helmet buckle before riding your tricycle or balance bike!', '5-7': 'Always wear a snug helmet level over your forehead whenever riding a bike, scooter, or skateboard.', '8-11': 'EPS foam inside bicycle helmets absorbs and disperses impact energy, reducing head injury risk by over 60%.' } },
+        { emoji: '🧯', front: 'Smoke Alarm', backTitle: 'Home Fire Safety', text: { '2-4': 'Beep-beep-beep! If the smoke alarm sounds, walk outside with a grown-up right away.', '5-7': 'Never hide under beds during a fire drill—stay low under smoke and meet at your family’s outdoor spot.', '8-11': 'Test smoke detectors monthly and know two exits from every room in your home.' } }
+      ],
+      emotions: [
+        { emoji: '😤', front: 'Frustration', backTitle: 'Big Feelings & Calm Breathing', text: { '2-4': 'When blocks fall down and you feel mad, take a deep "smell the flower, blow the candle" breath!', '5-7': 'Feeling frustrated means your brain is working hard on a tricky problem. Pause, breathe, and ask for help.', '8-11': 'Deep diaphragmatic breathing activates the parasympathetic nervous system, lowering stress hormones within 60 seconds.' } },
+        { emoji: '🤝', front: 'Empathy', backTitle: 'Understanding Others’ Hearts', text: { '2-4': 'When a friend is sad, offering a gentle pat or sharing a toy helps them smile again.', '5-7': 'Empathy means imagining how someone else feels and choosing words or actions that help them feel cared for.', '8-11': 'Cognitive and emotional empathy strengthen friendships, resolve conflicts peacefully, and prevent bullying.' } },
+        { emoji: '🛡️', front: 'Body Boundaries', backTitle: 'Safe & Respectful Space', text: { '2-4': 'You are the boss of your own body! You can always say "Stop" or "No hugs right now."', '5-7': 'Everyone has a personal bubble. Always ask before hugging friends, and tell a trusted adult if anyone breaks your safety rules.', '8-11': 'Healthy personal boundaries mean respecting both your own bodily autonomy and the consent and comfort of others.' } }
+      ]
+    };
+
+    const VAULT_SAMPLES = {
+      '01_Ages_2-4': {
+        code: '01_Ages_2-4 / Hygiene_and_Routines / Chart_01.pdf',
+        title: 'Toddler Visual Morning & Bedtime Routine Chart (Ages 2–4)',
+        desc: 'Designed for non-readers with bold icons. Print, laminate, and let toddlers check off each step!',
+        html: `
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 rounded-xl bg-cream border border-stone-200 flex items-center gap-2.5"><span class="text-2xl">☀️</span><div><strong>1. Wake &amp; Stretch</strong><div class="text-xs text-muted">Open curtains &amp; smile</div></div></div>
+            <div class="p-3 rounded-xl bg-cream border border-stone-200 flex items-center gap-2.5"><span class="text-2xl">🪥</span><div><strong>2. Brush Teeth</strong><div class="text-xs text-muted">Top, bottom &amp; tongue</div></div></div>
+            <div class="p-3 rounded-xl bg-cream border border-stone-200 flex items-center gap-2.5"><span class="text-2xl">👕</span><div><strong>3. Get Dressed</strong><div class="text-xs text-muted">Shirt, pants &amp; socks</div></div></div>
+            <div class="p-3 rounded-xl bg-cream border border-stone-200 flex items-center gap-2.5"><span class="text-2xl">📖</span><div><strong>4. Bedtime Story</strong><div class="text-xs text-muted">Screen-free cuddle read</div></div></div>
+          </div>
+        `
+      },
+      '02_Ages_5-7': {
+        code: '02_Ages_5-7 / Traffic_and_Safety / Road_Sign_Bingo.pdf',
+        title: 'Neighborhood Walk & Car-Ride Road Sign Bingo (Ages 5–7)',
+        desc: 'Zero-screen travel activity! Spot real traffic signs out the window and cross off 4 in a row.',
+        html: `
+          <div class="grid grid-cols-4 gap-2 text-center text-xs font-bold">
+            <div class="p-3 rounded-lg bg-red-50 border border-red-200">🛑<br>STOP Sign</div>
+            <div class="p-3 rounded-lg bg-amber-50 border border-amber-200">🚸<br>Crosswalk</div>
+            <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200">🚦<br>Traffic Light</div>
+            <div class="p-3 rounded-lg bg-sky-50 border border-sky-200">🚲<br>Bike Lane</div>
+          </div>
+          <div class="text-xs text-muted pt-2">Includes 30 unique randomized Bingo boards in the full bundle!</div>
+        `
+      },
+      '03_Ages_8-11': {
+        code: '03_Ages_8-11 / Space_Missions / Orbit_Logbook_p14.pdf',
+        title: 'Junior Astronaut Solar System Mission Logbook (Ages 8–11)',
+        desc: 'Hands-on scale math, planet comparison table, and nocturnal moon-phase observation tracker.',
+        html: `
+          <div class="text-xs space-y-2">
+            <div class="font-bold text-ink">Mission Task #4: Planetary Gravity Comparison</div>
+            <p class="text-muted">If you weigh 30 kg on Earth, multiply by <strong>0.38</strong> to calculate your weight on Mars (11.4 kg)!</p>
+            <div class="p-2.5 rounded-lg bg-sand font-mono text-[11px]">[ ] Night 1 Moon Sketch   [ ] Night 7 First Quarter   [ ] Night 14 Full Moon</div>
+          </div>
+        `
+      },
+      '04_Preschool_and_School_Packs': {
+        code: '04_School_Packs / Weekly_Teacher_Guide_Week01.pdf',
+        title: 'Preschool & Primary Classroom Lesson Guide + 30-Student Certificate',
+        desc: 'Ready-to-teach Circle Time script, Montessori 3-Part Card station setup, and printable student mastery award.',
+        html: `
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 rounded-lg bg-sageLight text-ink"><strong>Circle Time (15 mins):</strong> Project WonderWorld Interactive Farm → Discuss Farm-to-Table food chains.</div>
+            <div class="p-2.5 rounded-lg bg-ochreLight text-ink"><strong>Table Stations (25 mins):</strong> Print 30 copies of 3D Barn Craft + Matching Control Cards (Ink-Saver B&amp;W).</div>
+            <div class="p-2.5 rounded-lg bg-skyLight text-ink"><strong>Home Connection:</strong> Send home 1-page Parent Table-Talk Moral Story sheet.</div>
+          </div>
+        `
+      }
+    };
+
+    // ==========================================
+    // 6. UI CONTROLLERS & INTERACTIVITY
+    // ==========================================
+    function setAgeBand(band, notify = false) {
+      currentAgeBand = band;
+      document.querySelectorAll('.age-tab').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-ink', 'shadow-sm');
+        btn.classList.add('text-muted');
+      });
+      const activeBtn = document.getElementById('btn-age-' + band);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-ink', 'shadow-sm');
+        activeBtn.classList.remove('text-muted');
+      }
+
+      const cfg = AGE_CONFIG[band];
+      document.getElementById('age-pedagogy-badge').textContent = cfg.badge;
+      document.getElementById('hero-active-tier-pill').textContent = cfg.pill;
+      document.getElementById('farm-age-tag').textContent = cfg.label;
+      document.getElementById('fc-tier-label').textContent = cfg.pill;
+      document.getElementById('traffic-age-guidance').textContent = cfg.trafficGuidance;
+
+      selectFarmItem(currentFarmKey, false);
+      selectPlanet(currentPlanetKey, false);
+      renderFlashcard();
+      syncUrlParams();
+
+      if (notify) {
+        showToast(`Switched Sibling Mode to ${cfg.label}`);
+      }
+    }
+
+    function switchWorld(worldKey, withSound = false) {
+      currentWorldKey = worldKey;
+      document.querySelectorAll('.world-tab').forEach(tab => {
+        tab.classList.remove('bg-sage', 'text-white', 'shadow-sm');
+        tab.classList.add('bg-white', 'text-ink', 'border', 'border-stone-200');
+      });
+      const activeTab = document.getElementById('tab-world-' + worldKey);
+      if (activeTab) {
+        activeTab.classList.remove('bg-white', 'text-ink', 'border', 'border-stone-200');
+        activeTab.classList.add('bg-sage', 'text-white', 'shadow-sm');
+      }
+
+      document.querySelectorAll('.world-panel').forEach(panel => panel.classList.add('hidden'));
+      const panel = document.getElementById('world-panel-' + worldKey);
+      if (panel) panel.classList.remove('hidden');
+
+      syncUrlParams();
+      if (withSound) {
+        playTone(440, 'sine', 0.12, 550);
+      }
+    }
+
+    // Farm World
+    function selectFarmItem(key, withAudio = true) {
+      currentFarmKey = key;
+      const item = FARM_DATA[key];
+      document.getElementById('farm-detail-emoji').textContent = item.emoji;
+      document.getElementById('farm-detail-title').textContent = item.title;
+      document.getElementById('farm-detail-sound').textContent = item.sound;
+      document.getElementById('farm-detail-desc').textContent = item.desc[currentAgeBand];
+      document.getElementById('farm-detail-chain').textContent = item.chain;
+
+      if (withAudio) {
+        playAnimalSynth(key);
+        speakText(`${item.title}. ${item.desc[currentAgeBand]}`);
+      }
+    }
+
+    function speakCurrentFarm() {
+      const item = FARM_DATA[currentFarmKey];
+      speakText(`${item.title}. ${item.desc[currentAgeBand]}`, true);
+    }
+
+    // Space World
+    function selectPlanet(key, withAudio = true) {
+      currentPlanetKey = key;
+      const p = SPACE_DATA[key];
+      document.getElementById('space-detail-title').textContent = p.title;
+      document.getElementById('space-detail-stat').textContent = p.stat;
+      document.getElementById('space-detail-desc').textContent = p.desc[currentAgeBand];
+      document.getElementById('space-detail-challenge').textContent = p.challenge;
+      if (withAudio) {
+        playTone(320, 'sine', 0.25, 480);
+        speakText(`${p.title}. ${p.desc[currentAgeBand]}`);
+      }
+    }
+
+    function launchSpaceRocket() {
+      const rocket = document.getElementById('rocket-sprite');
+      const status = document.getElementById('rocket-status-text');
+      rocket.classList.remove('rocket-launching');
+      void rocket.offsetWidth;
+      rocket.classList.add('rocket-launching');
+      playTone(150, 'sawtooth', 0.8, 520);
+      status.textContent = '3... 2... 1... Liftoff! Thrusters overcoming Earth’s gravity!';
+      speakText('Three, two, one, liftoff! Thrusters overcoming Earth’s gravity!');
+      setTimeout(() => {
+        rocket.classList.remove('rocket-launching');
+        status.textContent = 'Orbit achieved! Click any planet above to inspect mission data.';
+      }, 1700);
+    }
+
+    // Traffic World
+    function toggleTrafficLight() {
+      const red = document.getElementById('light-red');
+      const green = document.getElementById('light-green');
+      const label = document.getElementById('signal-label');
+      const ped = document.getElementById('pedestrian-status');
+
+      if (trafficLightState === 'red') {
+        trafficLightState = 'green';
+        red.className = 'w-8 h-8 rounded-full bg-red-900/40 transition';
+        green.className = 'w-8 h-8 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/60 transition';
+        label.textContent = 'Cars Go';
+        label.className = 'text-[10px] font-bold uppercase tracking-wider text-emerald-300 mt-1';
+        ped.textContent = '✋ Walk Sign: WAIT ON CURB (Cars have green light)';
+        ped.className = 'text-sm font-bold text-amber-300';
+        playTone(300, 'sine', 0.2);
+      } else {
+        trafficLightState = 'red';
+        red.className = 'w-8 h-8 rounded-full bg-red-500 shadow-lg shadow-red-500/60 transition';
+        green.className = 'w-8 h-8 rounded-full bg-emerald-900/40 transition';
+        label.textContent = 'Cars Stop';
+        label.className = 'text-[10px] font-bold uppercase tracking-wider text-red-300 mt-1';
+        ped.textContent = '🚶 Walk Sign: SAFE TO CROSS (After Looking Left & Right!)';
+        ped.className = 'text-sm font-bold text-emerald-300';
+        playTone(520, 'sine', 0.2);
+      }
+    }
+
+    function attemptCrosswalk() {
+      const box = document.getElementById('traffic-feedback-box');
+      if (trafficLightState === 'red') {
+        trafficScore++;
+        document.getElementById('traffic-score-pill').textContent = `Safety Stars: ${trafficScore} ⭐`;
+        box.className = 'p-3.5 rounded-2xl bg-sageLight text-sage text-sm font-semibold';
+        box.textContent = '🌟 Great job! Cars stopped at the red light, and you looked Left-Right-Left before crossing safely!';
+        playTone(523, 'sine', 0.15, 659);
+        speakText('Great job! You looked left, right, and left again and crossed safely!');
+      } else {
+        box.className = 'p-3.5 rounded-2xl bg-terracottaLight text-terracotta text-sm font-semibold';
+        box.textContent = '✋ Hold on! Cars currently have a green light. Change the signal so cars stop first!';
+        playTone(180, 'sawtooth', 0.25);
+        speakText('Hold on! Cars have a green light. Wait safely on the curb.');
+      }
+    }
+
+    function checkRoadSign(choice) {
+      const box = document.getElementById('traffic-feedback-box');
+      if (choice === 'stop') {
+        trafficScore++;
+        document.getElementById('traffic-score-pill').textContent = `Safety Stars: ${trafficScore} ⭐`;
+        box.className = 'p-3.5 rounded-2xl bg-sageLight text-sage text-sm font-semibold';
+        box.textContent = '✅ Spot on! The 8-sided red octagon means every vehicle must come to a complete STOP.';
+        playTone(587, 'sine', 0.2);
+      } else {
+        box.className = 'p-3.5 rounded-2xl bg-ochreLight text-ink text-sm font-medium';
+        box.textContent = 'Not quite—look for the 8-sided red STOP octagon sign!';
+        playTone(220, 'sine', 0.2);
+      }
+    }
+
+    // Hygiene World
+    function toggleHygieneTask(btn, taskKey) {
+      if (hygieneCompleted.has(taskKey)) {
+        hygieneCompleted.delete(taskKey);
+        btn.classList.remove('border-sage', 'bg-sageLight/40');
+        btn.classList.add('border-stone-200', 'bg-white');
+      } else {
+        hygieneCompleted.add(taskKey);
+        btn.classList.remove('border-stone-200', 'bg-white');
+        btn.classList.add('border-sage', 'bg-sageLight/40');
+        playTone(520, 'sine', 0.15, 680);
+      }
+      document.getElementById('hygiene-progress-text').textContent = `${hygieneCompleted.size} / 4 Completed`;
+      if (hygieneCompleted.size === 4) {
+        showToast('🎉 All 4 Daily Healthy Habits Completed!');
+      }
+    }
+
+    // Moral Stories
+    function loadStory(index) {
+      currentStoryIndex = index;
+      document.querySelectorAll('.story-selector').forEach((btn, idx) => {
+        if (idx === index) {
+          btn.className = 'story-selector px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold bg-terracotta text-white shadow-sm';
+        } else {
+          btn.className = 'story-selector px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:bg-stone-50';
+        }
+      });
+
+      const story = STORIES_DATA[index];
+      document.getElementById('story-theme-badge').textContent = story.theme;
+      document.getElementById('story-title').textContent = story.title;
+      document.getElementById('story-narrative').textContent = story.narrative;
+      document.getElementById('story-parent-prompt').textContent = `"${story.parentPrompt}"`;
+      document.getElementById('story-outcome-title').textContent = 'Choose an action on the left to see what happens!';
+      document.getElementById('story-outcome-text').textContent = 'Every decision shapes how others feel and builds our inner character.';
+
+      const container = document.getElementById('story-choices-container');
+      container.innerHTML = '';
+      story.choices.forEach((choice, cIdx) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left p-4 rounded-2xl bg-white border-2 border-stone-200 hover:border-terracotta transition font-medium text-sm sm:text-base text-ink flex items-center justify-between gap-3';
+        btn.innerHTML = `<span>${choice.label}</span><span class="text-xs font-bold text-terracotta shrink-0">Choose →</span>`;
+        btn.onclick = () => {
+          document.getElementById('story-outcome-title').textContent = choice.outcomeTitle;
+          document.getElementById('story-outcome-text').textContent = choice.outcomeText;
+          playTone(cIdx === 0 ? 540 : 280, 'sine', 0.25);
+          speakText(`${choice.outcomeTitle}. ${choice.outcomeText}`);
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function speakCurrentStory() {
+      const s = STORIES_DATA[currentStoryIndex];
+      speakText(`${s.title}. ${s.narrative}`, true);
+    }
+
+    // Smart Flashcards
+    function selectFlashcardDeck(deckKey) {
+      currentDeckKey = deckKey;
+      currentCardIndex = 0;
+      document.querySelectorAll('.deck-btn').forEach(btn => {
+        btn.className = 'deck-btn px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:bg-stone-50 transition';
+      });
+      const active = document.getElementById('deck-btn-' + deckKey);
+      if (active) {
+        active.className = 'deck-btn px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold bg-sky text-white shadow-sm transition';
+      }
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const deck = FLASHCARD_DECKS[currentDeckKey];
+      const card = deck[currentCardIndex];
+      const inner = document.getElementById('flashcard-inner');
+      inner.classList.remove('flipped');
+
+      document.getElementById('fc-counter').textContent = `Card ${currentCardIndex + 1} of ${deck.length}`;
+      document.getElementById('fc-emoji').textContent = card.emoji;
+      document.getElementById('fc-front-title').textContent = card.front;
+      document.getElementById('fc-back-label').textContent = card.backTitle;
+      document.getElementById('fc-back-text').textContent = card.text[currentAgeBand];
+    }
+
+    function flipFlashcard() {
+      const inner = document.getElementById('flashcard-inner');
+      inner.classList.toggle('flipped');
+      playTone(460, 'sine', 0.12, 580);
+    }
+
+    function nextFlashcard() {
+      const deck = FLASHCARD_DECKS[currentDeckKey];
+      currentCardIndex = (currentCardIndex + 1) % deck.length;
+      renderFlashcard();
+    }
+
+    function prevFlashcard() {
+      const deck = FLASHCARD_DECKS[currentDeckKey];
+      currentCardIndex = (currentCardIndex - 1 + deck.length) % deck.length;
+      renderFlashcard();
+    }
+
+    function speakFlashcard() {
+      const deck = FLASHCARD_DECKS[currentDeckKey];
+      const card = deck[currentCardIndex];
+      speakText(`${card.front}. ${card.text[currentAgeBand]}`, true);
+    }
+
+    // Vault Modal & Sample Sheet Explorer
+    function openVaultModal(folderKey = '04_Preschool_and_School_Packs') {
+      document.getElementById('vault-modal').classList.remove('hidden');
+      selectVaultFolder(folderKey);
+    }
+
+    function closeVaultModal() {
+      document.getElementById('vault-modal').classList.add('hidden');
+    }
+
+    function selectVaultFolder(folderKey) {
+      document.querySelectorAll('.vault-folder-btn').forEach(btn => {
+        btn.className = 'vault-folder-btn w-full text-left p-3 rounded-2xl border border-stone-200 bg-white text-ink text-xs sm:text-sm font-semibold hover:bg-stone-50 transition';
+      });
+      const active = document.getElementById('folder-' + folderKey);
+      if (active) {
+        active.className = 'vault-folder-btn w-full text-left p-3 rounded-2xl border-2 border-sage bg-sageLight text-ink text-xs sm:text-sm font-bold transition';
+      }
+
+      const sample = VAULT_SAMPLES[folderKey] || VAULT_SAMPLES['04_Preschool_and_School_Packs'];
+      document.getElementById('sample-sheet-code').textContent = sample.code;
+      document.getElementById('sample-sheet-title').textContent = sample.title;
+      document.getElementById('sample-sheet-desc').textContent = sample.desc;
+      document.getElementById('sample-sheet-content').innerHTML = sample.html;
+    }
+
+    function triggerBundleCheckout(bundleName) {
+      showToast(`✨ Added "${bundleName}" — Opening instant download preview!`);
+      openVaultModal('04_Preschool_and_School_Packs');
+    }
+
+    // Copy Bridge Banner Snippet for index.html (Uses execCommand fallback for iFrame reliability)
+    function copyBridgeSnippet() {
+      const codeEl = document.getElementById('bridge-snippet-code');
+      const text = codeEl.textContent;
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('📋 Bridge Banner HTML copied! Paste it into your index.html');
+      } catch (err) {
+        showToast('Select and copy the HTML snippet block manually.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // Toast Helper
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = 'px-4 py-3 rounded-2xl bg-ink text-white text-xs sm:text-sm font-medium shadow-xl border border-stone-700 transition transform translate-y-0';
+      el.textContent = msg;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 300);
+      }, 3200);
+    }
+
+    // Initialize App Defaults & URL Query/Hash Routing on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      applyInitialUrlState();
+    });
+  </script>
+</body>
+</html>
