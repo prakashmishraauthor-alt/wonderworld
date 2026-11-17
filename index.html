@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Little Wonder World — Interactive Kids Learning &amp; Printable Studio</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Fredoka & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg-night: #0F172A;
+      --bg-surface: #1E293B;
+      --bg-card: #162033;
+      --accent-yellow: #FBBF24;
+      --accent-sky: #38BDF8;
+      --accent-coral: #FB7185;
+      --accent-mint: #34D399;
+      --accent-lavender: #C084FC;
+    }
+
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-night);
+      color: #F8FAFC;
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4, .font-fredoka {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    /* Starfield Background Animation */
+    .starfield {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .star-dot {
+      position: absolute;
+      background: #FFF;
+      border-radius: 9999px;
+      animation: twinkle var(--dur, 3s) infinite ease-in-out;
+      opacity: 0.7;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.25; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 18px rgba(251, 191, 36, 0.35); }
+      50% { box-shadow: 0 0 32px rgba(251, 191, 36, 0.7); }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      75% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .animate-float {
+      animation: floatSlow 4.5s ease-in-out infinite;
+    }
+
+    .animate-glow {
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    .animate-pop {
+      animation: popIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Custom Playful Buttons */
+    .btn-wonder {
+      font-family: 'Fredoka', sans-serif;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-wonder:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+    }
+
+    .btn-wonder:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    /* Glass Card */
+    .wonder-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.96));
+      border: 2px solid rgba(148, 163, 184, 0.16);
+      backdrop-filter: blur(10px);
+      border-radius: 1.5rem;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .wonder-card:hover {
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 16px 35px -10px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B1120;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+      border: 2px solid #0B1120;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38BDF8;
+    }
+
+    /* Canvas Cursor & Touch Lock */
+    .draw-canvas {
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    /* Confetti Piece */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      z-index: 9999;
+      pointer-events: none;
+      border-radius: 3px;
+      animation: confettiFall 1.6s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) rotate(720deg) scale(0.3); opacity: 0; }
+    }
+
+    /* Print Styling for Page 2 Certificate & Worksheets */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-area, #printable-area * {
+        visibility: visible;
+      }
+      #printable-area {
+        position: fixed;
+        inset: 0;
+        background: white !important;
+        color: black !important;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body class="relative selection:bg-amber-400 selection:text-slate-900">
+
+  <!-- Animated Night Sky Starfield -->
+  <div id="starfield" class="starfield" aria-hidden="true"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ===================================================================== -->
+  <!-- STICKY NAVIGATION BAR                                                 -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+      <!-- Brand Logo -->
+      <a href="#top" onclick="switchPage('page1')" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-400 to-rose-400 flex items-center justify-center text-slate-950 text-xl font-bold shadow-lg group-hover:rotate-6 transition-transform">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div>
+          <span class="font-fredoka text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-amber-300 via-sky-300 to-purple-300 bg-clip-text text-transparent">
+            Little Wonder World
+          </span>
+          <span class="hidden sm:block text-[11px] text-slate-400 font-semibold tracking-wider uppercase">
+            Play • Trace • Explore
+          </span>
+        </div>
+      </a>
+
+      <!-- Multi-Page Switcher Pills (Page 1 & Page 2 Linked) -->
+      <div class="flex items-center bg-slate-900/90 p-1.5 rounded-2xl border border-slate-700/80 shadow-inner">
+        <button id="nav-page1-btn" onclick="switchPage('page1')" class="px-3 sm:px-4 py-2 rounded-xl font-fredoka text-xs sm:text-sm font-semibold transition-all bg-amber-400 text-slate-950 shadow">
+          <i class="fa-solid fa-castle mr-1.5"></i>Page 1: Wonder Land
+        </button>
+        <button id="nav-page2-btn" onclick="switchPage('page2')" class="px-3 sm:px-4 py-2 rounded-xl font-fredoka text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white">
+          <i class="fa-solid fa-award mr-1.5 text-sky-400"></i>Page 2: Studio &amp; Vault
+        </button>
+      </div>
+
+      <!-- Desktop Section Links (Page 1) -->
+      <nav id="page1-subnav" class="hidden xl:flex items-center gap-5 text-sm font-bold text-slate-300">
+        <a href="#playground" class="hover:text-amber-400 transition">Playground</a>
+        <a href="#library" class="hover:text-sky-400 transition">Library</a>
+        <a href="#creative" class="hover:text-emerald-400 transition">Doodle Pad</a>
+        <a href="#store" class="hover:text-rose-400 transition">PDF Store</a>
+        <a href="#parents" class="hover:text-purple-400 transition">Parents</a>
+      </nav>
+
+      <!-- Right Controls: Stars Counter & Cart Drawer Button -->
+      <div class="flex items-center gap-2.5">
+        <div title="Total Wonder Stars Earned" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-amber-400/40 text-amber-300 font-fredoka font-semibold text-sm">
+          <i class="fa-solid fa-star text-amber-400 animate-spin" style="animation-duration: 9s;"></i>
+          <span id="header-stars-count">12</span>
+        </div>
+
+        <button onclick="toggleCart(true)" class="btn-wonder relative px-4 py-2.5 rounded-2xl bg-sky-400 text-slate-950 font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-basket-shopping"></i>
+          <span class="hidden sm:inline">Cart</span>
+          <span id="cart-badge" class="inline-flex items-center justify-center w-5 h-5 text-xs font-extrabold rounded-full bg-rose-500 text-white">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- PAGE 1: WONDER LAND (MAIN INTERACTIVE HUB)                            -->
+  <!-- ===================================================================== -->
+  <main id="page-1" class="relative z-10">
+
+    <!-- HERO SECTION -->
+    <section id="top" class="pt-10 pb-16 sm:pt-16 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-12 gap-10 items-center">
+        <!-- Left Copy -->
+        <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/90 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-bold">
+            <i class="fa-solid fa-sparkles"></i>
+            <span>Screen-Smart Play for Ages 2–7 • 100% Ad-Free</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+            Where Curious Little Minds
+            <span class="block bg-gradient-to-r from-amber-300 via-sky-400 to-rose-400 bg-clip-text text-transparent">
+              Shine Like the Stars!
+            </span>
+          </h1>
+
+          <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            Trace glowing letters, count friendly space creatures, listen to animal adventures, and unlock printable screen-free activity bundles crafted by early childhood educators.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+            <a href="#playground" class="btn-wonder px-7 py-4 rounded-2xl bg-amber-400 text-slate-950 font-bold text-base sm:text-lg flex items-center gap-2.5 animate-glow">
+              <i class="fa-solid fa-rocket"></i>
+              Start Playing Now
+            </a>
+            <button onclick="switchPage('page2')" class="btn-wonder px-6 py-4 rounded-2xl bg-slate-800 border-2 border-sky-400/60 text-sky-300 font-bold text-base sm:text-lg flex items-center gap-2">
+              <i class="fa-solid fa-print"></i>
+              Explore Page 2 Printables
+            </button>
+          </div>
+
+          <!-- Quick Trust Badges -->
+          <div class="grid grid-cols-3 gap-3 pt-4 max-w-md mx-auto lg:mx-0">
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3 text-center">
+              <div class="font-fredoka text-xl font-bold text-amber-400">26</div>
+              <div class="text-xs text-slate-400 font-semibold">Phonics Letters</div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3 text-center">
+              <div class="font-fredoka text-xl font-bold text-emerald-400">50+</div>
+              <div class="text-xs text-slate-400 font-semibold">Printable Sheets</div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3 text-center">
+              <div class="font-fredoka text-xl font-bold text-purple-400">100%</div>
+              <div class="text-xs text-slate-400 font-semibold">Kid-Safe Joy</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Visual: Starry Night Castle & Kids Hero Banner (SVG Illustration) -->
+        <div class="lg:col-span-6">
+          <div class="relative rounded-3xl overflow-hidden border-2 border-sky-400/40 shadow-2xl bg-gradient-to-b from-indigo-950 via-slate-900 to-slate-950 p-3 sm:p-5 animate-float">
+            <svg viewBox="0 0 640 440" class="w-full h-auto rounded-2xl" role="img" aria-label="Starry Night Wonder Castle and Happy Kids">
+              <defs>
+                <linearGradient id="nightSkyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#090D1E" />
+                  <stop offset="55%" stop-color="#1E1B4B" />
+                  <stop offset="100%" stop-color="#0F172A" />
+                </linearGradient>
+                <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#FDE68A" stop-opacity="0.9" />
+                  <stop offset="60%" stop-color="#FBBF24" stop-opacity="0.25" />
+                  <stop offset="100%" stop-color="#FBBF24" stop-opacity="0" />
+                </radialGradient>
+                <linearGradient id="castleWall" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#6366F1" />
+                  <stop offset="100%" stop-color="#3B82F6" />
+                </linearGradient>
+                <linearGradient id="hillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#10B981" />
+                  <stop offset="100%" stop-color="#065F46" />
+                </linearGradient>
+              </defs>
+
+              <!-- Sky -->
+              <rect width="640" height="440" fill="url(#nightSkyGrad)" />
+
+              <!-- Glowing Moon -->
+              <circle cx="515" cy="85" r="78" fill="url(#moonGlow)" />
+              <circle cx="515" cy="85" r="34" fill="#FDE68A" />
+              <circle cx="527" cy="77" r="28" fill="#17163B" />
+
+              <!-- Twinkling Stars & Shooting Star -->
+              <g fill="#FBBF24">
+                <polygon points="95,45 99,55 110,55 101,62 104,72 95,66 86,72 89,62 80,55 91,55" />
+                <polygon points="210,32 213,40 222,40 215,45 217,53 210,48 203,53 205,45 198,40 207,40" fill="#38BDF8" />
+                <polygon points="395,42 398,50 407,50 400,55 402,63 395,58 388,63 390,55 383,50 392,50" fill="#FB7185" />
+                <circle cx="150" cy="95" r="3" />
+                <circle cx="275" cy="72" r="2.5" fill="#FFF" />
+                <circle cx="445" cy="115" r="3" fill="#C084FC" />
+                <circle cx="65" cy="145" r="2.5" fill="#34D399" />
+              </g>
+              <!-- Shooting Star Trail -->
+              <path d="M 140 125 Q 210 95 290 82" stroke="#FDE68A" stroke-width="3" stroke-linecap="round" fill="none" stroke-dasharray="6 4" />
+
+              <!-- Rainbow Arch Behind Castle -->
+              <path d="M 155 320 A 165 165 0 0 1 485 320" fill="none" stroke="#FB7185" stroke-width="10" opacity="0.55" />
+              <path d="M 167 320 A 153 153 0 0 1 473 320" fill="none" stroke="#FBBF24" stroke-width="10" opacity="0.55" />
+              <path d="M 179 320 A 141 141 0 0 1 461 320" fill="none" stroke="#34D399" stroke-width="10" opacity="0.55" />
+              <path d="M 191 320 A 129 129 0 0 1 449 320" fill="none" stroke="#38BDF8" stroke-width="10" opacity="0.55" />
+
+              <!-- Wonder Castle -->
+              <!-- Left Tower -->
+              <rect x="205" y="185" width="48" height="145" rx="6" fill="url(#castleWall)" />
+              <polygon points="200,185 229,132 258,185" fill="#FB7185" />
+              <line x1="229" y1="132" x2="229" y2="112" stroke="#FBBF24" stroke-width="3" />
+              <polygon points="229,112 248,119 229,126" fill="#FBBF24" />
+              <circle cx="229" cy="215" r="9" fill="#FDE68A" />
+
+              <!-- Right Tower -->
+              <rect x="387" y="185" width="48" height="145" rx="6" fill="url(#castleWall)" />
+              <polygon points="382,185 411,132 440,185" fill="#C084FC" />
+              <line x1="411" y1="132" x2="411" y2="112" stroke="#38BDF8" stroke-width="3" />
+              <polygon points="411,112 430,119 411,126" fill="#38BDF8" />
+              <circle cx="411" cy="215" r="9" fill="#FDE68A" />
+
+              <!-- Center Keep -->
+              <rect x="248" y="155" width="144" height="175" rx="8" fill="#4F46E5" />
+              <polygon points="242,155 320,90 398,155" fill="#FBBF24" />
+              <circle cx="320" cy="195" r="16" fill="#FDE68A" stroke="#1E1B4B" stroke-width="3" />
+              <!-- Castle Gate -->
+              <path d="M 294 330 L 294 268 A 26 26 0 0 1 346 268 L 346 330 Z" fill="#1E1B4B" />
+              <path d="M 300 330 L 300 271 A 20 20 0 0 1 340 271 L 340 330 Z" fill="#F59E0B" />
+
+              <!-- Rolling Emerald Hills -->
+              <ellipse cx="180" cy="395" rx="260" ry="95" fill="#047857" />
+              <ellipse cx="480" cy="400" rx="270" ry="100" fill="url(#hillGrad)" />
+
+              <!-- Happy Kid 1 (Left, Waving with Star Wand) -->
+              <g transform="translate(120, 290)">
+                <circle cx="30" cy="24" r="19" fill="#FDBA74" />
+                <!-- Curly Hair -->
+                <circle cx="17" cy="14" r="8" fill="#312E81" />
+                <circle cx="30" cy="9" r="9" fill="#312E81" />
+                <circle cx="43" cy="14" r="8" fill="#312E81" />
+                <!-- Eyes & Smile -->
+                <circle cx="24" cy="24" r="2.3" fill="#0F172A" />
+                <circle cx="36" cy="24" r="2.3" fill="#0F172A" />
+                <path d="M 24 30 Q 30 36 36 30" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                <!-- Shirt -->
+                <rect x="14" y="43" width="32" height="36" rx="12" fill="#38BDF8" />
+                <!-- Raised Arm & Wand -->
+                <line x1="44" y1="50" x2="66" y2="26" stroke="#FDBA74" stroke-width="6" stroke-linecap="round" />
+                <line x1="66" y1="26" x2="78" y2="8" stroke="#FBBF24" stroke-width="3" />
+                <polygon points="78,0 81,6 88,6 82,10 84,16 78,12 72,16 74,10 68,6 75,6" fill="#FBBF24" />
+              </g>
+
+              <!-- Happy Kid 2 (Right, Holding Storybook) -->
+              <g transform="translate(465, 292)">
+                <circle cx="30" cy="24" r="19" fill="#FCD34D" />
+                <!-- Hair Puffs -->
+                <circle cx="13" cy="15" r="8" fill="#7C2D12" />
+                <circle cx="47" cy="15" r="8" fill="#7C2D12" />
+                <path d="M 13 20 Q 30 4 47 20" fill="#7C2D12" />
+                <!-- Eyes & Smile -->
+                <circle cx="24" cy="24" r="2.3" fill="#0F172A" />
+                <circle cx="36" cy="24" r="2.3" fill="#0F172A" />
+                <path d="M 24 30 Q 30 36 36 30" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                <!-- Dress/Top -->
+                <rect x="14" y="43" width="32" height="36" rx="12" fill="#FB7185" />
+                <!-- Open Book -->
+                <rect x="12" y="52" width="18" height="14" rx="2" fill="#FFF" transform="rotate(-10 12 52)" />
+                <rect x="30" y="49" width="18" height="14" rx="2" fill="#FEF3C7" transform="rotate(10 30 49)" />
+              </g>
+
+              <!-- Cute Friendly Owl on Fence -->
+              <g transform="translate(245, 342)">
+                <ellipse cx="18" cy="20" rx="14" ry="16" fill="#C084FC" />
+                <circle cx="13" cy="15" r="5" fill="#FFF" />
+                <circle cx="23" cy="15" r="5" fill="#FFF" />
+                <circle cx="13" cy="15" r="2.2" fill="#0F172A" />
+                <circle cx="23" cy="15" r="2.2" fill="#0F172A" />
+                <polygon points="16,19 20,19 18,24" fill="#FBBF24" />
+              </g>
+            </svg>
+
+            <!-- Floating Interactive Quick-Action Strip on Hero Card -->
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-2 px-2 text-xs sm:text-sm">
+              <span class="text-sky-300 font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-volume-high text-amber-400"></i> Tap any letter or animal to hear sounds!
+              </span>
+              <button onclick="playSuccessChime(); spawnConfetti(window.innerWidth/2, window.innerHeight/3);" class="px-3 py-1 rounded-full bg-amber-400/20 border border-amber-400/50 text-amber-300 font-bold hover:bg-amber-400 hover:text-slate-950 transition">
+                ✨ Sparkle Magic
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- INTERACTIVE PLAYGROUND SECTION (TABBED INTERFACE)                   -->
+    <!-- =================================================================== -->
+    <section id="playground" class="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="px-4 py-1 rounded-full bg-sky-400/15 border border-sky-400/40 text-sky-300 text-xs font-extrabold uppercase tracking-wider">
+          Interactive Learning Zone
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-bold mt-3">
+          Magical <span class="text-amber-400">Play &amp; Learn</span> Playground
+        </h2>
+        <p class="text-slate-400 mt-2 text-sm sm:text-base">
+          Choose an activity below to practice tracing letters, counting glowing stars, or discovering animal sounds!
+        </p>
+      </div>
+
+      <!-- Playground Tabs -->
+      <div class="flex flex-wrap justify-center gap-3 mb-8" role="tablist">
+        <button id="tab-btn-tracing" onclick="switchPlaygroundTab('tracing')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-amber-400 text-slate-950 font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-pen-nib"></i>
+          1. Alphabet &amp; Tracing
+        </button>
+        <button id="tab-btn-counting" onclick="switchPlaygroundTab('counting')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-star"></i>
+          2. Counting Adventure
+        </button>
+        <button id="tab-btn-animals" onclick="switchPlaygroundTab('animals')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-paw"></i>
+          3. Animal Sounds &amp; Facts
+        </button>
+      </div>
+
+      <!-- TAB 1: ALPHABET & TRACING -->
+      <div id="tab-panel-tracing" class="wonder-card p-6 sm:p-8">
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          <!-- Left: A-Z Letter Picker & Phonics Card -->
+          <div class="lg:col-span-5 space-y-5">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-bold text-amber-300">Pick a Letter (A–Z)</h3>
+              <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-300">
+                Traced: <span id="traced-count-badge" class="text-emerald-400">0</span>/26
+              </span>
+            </div>
+
+            <!-- A-Z Grid -->
+            <div id="alphabet-grid" class="grid grid-cols-6 sm:grid-cols-7 gap-2"></div>
+
+            <!-- Selected Letter Phonics & Word Card -->
+            <div class="bg-slate-900/90 border-2 border-amber-400/40 rounded-2xl p-5 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <div id="current-letter-emoji" class="w-16 h-16 rounded-2xl bg-amber-400/15 border border-amber-400/40 flex items-center justify-center text-4xl">
+                  🍎
+                </div>
+                <div>
+                  <div class="flex items-baseline gap-2">
+                    <span id="current-letter-display" class="font-fredoka text-3xl font-bold text-amber-400">A a</span>
+                    <span id="current-phonics-sound" class="text-xs font-extrabold uppercase px-2 py-0.5 rounded bg-sky-400/20 text-sky-300">
+                      /æ/ sound
+                    </span>
+                  </div>
+                  <p id="current-letter-word" class="text-lg font-bold text-white mt-0.5">A is for Apple</p>
+                </div>
+              </div>
+
+              <button onclick="speakCurrentLetter()" title="Hear Phonics Pronunciation" class="btn-wonder w-14 h-14 rounded-2xl bg-sky-400 text-slate-950 flex items-center justify-center text-xl shrink-0">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Interactive HTML5 Tracing Canvas -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 class="text-xl font-bold text-sky-300">Trace Inside the Dotted Letter!</h3>
+                <p class="text-xs text-slate-400">Use your finger or mouse to trace over the glowing guide.</p>
+              </div>
+
+              <!-- Brush Color Picker -->
+              <div class="flex items-center gap-2 bg-slate-900 px-3 py-2 rounded-2xl border border-slate-700">
+                <span class="text-xs font-bold text-slate-400 mr-1">Brush:</span>
+                <button onclick="setTraceColor('#FBBF24', this)" class="trace-color-btn w-7 h-7 rounded-full bg-amber-400 ring-2 ring-white scale-110 transition" aria-label="Yellow"></button>
+                <button onclick="setTraceColor('#38BDF8', this)" class="trace-color-btn w-7 h-7 rounded-full bg-sky-400 transition" aria-label="Sky Blue"></button>
+                <button onclick="setTraceColor('#FB7185', this)" class="trace-color-btn w-7 h-7 rounded-full bg-rose-400 transition" aria-label="Coral"></button>
+                <button onclick="setTraceColor('#34D399', this)" class="trace-color-btn w-7 h-7 rounded-full bg-emerald-400 transition" aria-label="Mint"></button>
+                <button onclick="setTraceColor('#C084FC', this)" class="trace-color-btn w-7 h-7 rounded-full bg-purple-400 transition" aria-label="Lavender"></button>
+              </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="relative rounded-3xl overflow-hidden border-2 border-slate-700 bg-slate-950 shadow-inner">
+              <canvas id="tracing-canvas" class="draw-canvas w-full h-72 sm:h-80 block"></canvas>
+              <div id="trace-celebration-banner" class="hidden absolute inset-0 bg-slate-950/75 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6 animate-pop">
+                <div class="text-5xl mb-2">🌟🎉🌟</div>
+                <h4 class="font-fredoka text-2xl sm:text-3xl font-bold text-amber-400">Super Tracing!</h4>
+                <p class="text-slate-200 text-sm sm:text-base mt-1">You earned +1 Wonder Star!</p>
+                <button onclick="nextTracingLetter()" class="btn-wonder mt-4 px-6 py-2.5 rounded-xl bg-emerald-400 text-slate-950 font-bold text-sm">
+                  Next Letter <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas Action Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <button onclick="clearTracingCanvas()" class="btn-wonder px-5 py-2.5 rounded-xl bg-slate-800 border border-slate-600 text-slate-200 font-bold text-sm">
+                <i class="fa-solid fa-eraser mr-1.5 text-rose-400"></i>Clear &amp; Try Again
+              </button>
+              <button onclick="completeTracingLetter()" class="btn-wonder px-6 py-2.5 rounded-xl bg-emerald-400 text-slate-950 font-bold text-sm">
+                <i class="fa-solid fa-star mr-1.5"></i>I Finished Tracing! (+1 Star)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: COUNTING ADVENTURE -->
+      <div id="tab-panel-counting" class="hidden wonder-card p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-800">
+          <div>
+            <h3 class="text-2xl font-bold text-amber-300">Space &amp; Critter Counting Adventure</h3>
+            <p class="text-sm text-slate-400">Count all the cute friends in the night sky and tap the matching number bubble!</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="px-4 py-2 rounded-2xl bg-slate-900 border border-emerald-400/40 text-sm font-bold">
+              🔥 Streak: <span id="counting-streak" class="text-emerald-400 font-fredoka text-lg">0</span>
+            </div>
+            <div class="px-4 py-2 rounded-2xl bg-slate-900 border border-sky-400/40 text-sm font-bold">
+              🏆 Score: <span id="counting-score" class="text-sky-400 font-fredoka text-lg">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Object Arena -->
+        <div id="counting-arena" class="my-6 min-h-[210px] rounded-3xl bg-slate-950/90 border-2 border-indigo-500/30 p-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+          <!-- Populated dynamically by JS -->
+        </div>
+
+        <!-- Prompt & Number Choice Bubbles -->
+        <div class="text-center space-y-4">
+          <p id="counting-question-text" class="font-fredoka text-xl sm:text-2xl font-bold text-white">
+            How many glowing stars do you see?
+          </p>
+          <div id="counting-options" class="flex flex-wrap items-center justify-center gap-4">
+            <!-- Number bubbles injected by JS -->
+          </div>
+          <p id="counting-feedback" class="h-7 font-fredoka text-lg font-semibold text-amber-300"></p>
+        </div>
+      </div>
+
+      <!-- TAB 3: ANIMAL SOUNDS & FUN FACTS -->
+      <div id="tab-panel-animals" class="hidden wonder-card p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-2xl font-bold text-emerald-300">Nighttime &amp; Forest Animal Soundboard</h3>
+            <p class="text-sm text-slate-400">Tap any animal friend to hear its sound effect and a spoken fun fact!</p>
+          </div>
+          <div id="animal-now-playing" class="px-4 py-2 rounded-2xl bg-slate-900 border border-purple-400/40 text-purple-300 text-sm font-bold">
+            <i class="fa-solid fa-music mr-1.5"></i> Tap an animal card!
+          </div>
+        </div>
+
+        <div id="animal-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Animal cards injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- LEARNING LIBRARY SECTION (FILTERABLE ACTIVITIES)                    -->
+    <!-- =================================================================== -->
+    <section id="library" class="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div>
+          <span class="px-4 py-1 rounded-full bg-purple-400/15 border border-purple-400/40 text-purple-300 text-xs font-extrabold uppercase tracking-wider">
+            Curated Mini-Lessons
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-bold mt-3">
+            Interactive <span class="text-sky-400">Learning Library</span>
+          </h2>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div id="library-filters" class="flex flex-wrap gap-2">
+          <button onclick="filterLibrary('All', this)" class="lib-filter-btn px-4 py-2 rounded-xl font-fredoka text-sm font-semibold bg-sky-400 text-slate-950 transition">All</button>
+          <button onclick="filterLibrary('Ages 2-4', this)" class="lib-filter-btn px-4 py-2 rounded-xl font-fredoka text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Ages 2–4</button>
+          <button onclick="filterLibrary('Ages 4-6', this)" class="lib-filter-btn px-4 py-2 rounded-xl font-fredoka text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Ages 4–6</button>
+          <button onclick="filterLibrary('Math', this)" class="lib-filter-btn px-4 py-2 rounded-xl font-fredoka text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Math</button>
+          <button onclick="filterLibrary('Phonics', this)" class="lib-filter-btn px-4 py-2 rounded-xl font-fredoka text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Phonics</button>
+          <button onclick="filterLibrary('Science', this)" class="lib-filter-btn px-4 py-2 rounded-xl font-fredoka text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Science</button>
+        </div>
+      </div>
+
+      <div id="library-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Populated dynamically -->
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- CREATIVE CORNER SECTION (MINI DOODLE PAD & COLORING SHEETS)         -->
+    <!-- =================================================================== -->
+    <section id="creative" class="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="wonder-card p-6 sm:p-8 border-emerald-400/30">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+          <div>
+            <span class="px-3.5 py-1 rounded-full bg-emerald-400/15 border border-emerald-400/40 text-emerald-300 text-xs font-extrabold uppercase">
+              Creative Art Studio
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold mt-2">
+              Starry Night <span class="text-emerald-400">Doodle &amp; Coloring Pad</span>
+            </h2>
+          </div>
+
+          <!-- Template Switcher & Tools -->
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="loadDoodleTemplate('free')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold border border-slate-600">
+              🎨 Free Draw
+            </button>
+            <button onclick="loadDoodleTemplate('rocket')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold border border-slate-600">
+              🚀 Rocket Outline
+            </button>
+            <button onclick="loadDoodleTemplate('star')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold border border-slate-600">
+              ⭐ Magic Star Outline
+            </button>
+            <button onclick="downloadDoodle()" class="btn-wonder px-4 py-2 rounded-xl bg-amber-400 text-slate-950 text-xs font-bold">
+              <i class="fa-solid fa-download mr-1"></i> Save Artwork
+            </button>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-9">
+            <div class="rounded-3xl overflow-hidden border-2 border-slate-700 bg-slate-950">
+              <canvas id="doodle-canvas" class="draw-canvas w-full h-72 sm:h-80 block"></canvas>
+            </div>
+          </div>
+
+          <!-- Palette & Brush Size -->
+          <div class="lg:col-span-3 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-5">
+            <div>
+              <p class="text-xs font-extrabold uppercase text-slate-400 mb-2.5">Crayon Colors</p>
+              <div class="grid grid-cols-4 gap-2.5">
+                <button onclick="setDoodleColor('#FBBF24')" class="w-9 h-9 rounded-xl bg-amber-400 hover:scale-110 transition"></button>
+                <button onclick="setDoodleColor('#38BDF8')" class="w-9 h-9 rounded-xl bg-sky-400 hover:scale-110 transition"></button>
+                <button onclick="setDoodleColor('#FB7185')" class="w-9 h-9 rounded-xl bg-rose-400 hover:scale-110 transition"></button>
+                <button onclick="setDoodleColor('#34D399')" class="w-9 h-9 rounded-xl bg-emerald-400 hover:scale-110 transition"></button>
+                <button onclick="setDoodleColor('#C084FC')" class="w-9 h-9 rounded-xl bg-purple-400 hover:scale-110 transition"></button>
+                <button onclick="setDoodleColor('#F97316')" class="w-9 h-9 rounded-xl bg-orange-500 hover:scale-110 transition"></button>
+                <button onclick="setDoodleColor('#FFFFFF')" class="w-9 h-9 rounded-xl bg-white hover:scale-110 transition"></button>
+                <button onclick="setDoodleColor('#0F172A')" title="Eraser" class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-600 text-xs flex items-center justify-center hover:scale-110 transition">
+                  <i class="fa-solid fa-eraser text-slate-300"></i>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label for="brush-size-range" class="text-xs font-extrabold uppercase text-slate-400 block mb-2">
+                Brush Thickness: <span id="brush-size-val" class="text-amber-400">8px</span>
+              </label>
+              <input id="brush-size-range" type="range" min="3" max="24" value="8" oninput="setDoodleSize(this.value)" class="w-full accent-amber-400" />
+            </div>
+
+            <button onclick="clearDoodleCanvas()" class="w-full py-2.5 rounded-xl bg-rose-500/20 border border-rose-500/50 text-rose-300 font-bold text-xs hover:bg-rose-500 hover:text-white transition">
+              <i class="fa-solid fa-trash-can mr-1.5"></i> Clear Canvas
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PRINTABLE BUNDLES STORE SECTION                                     -->
+    <!-- =================================================================== -->
+    <section id="store" class="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="px-4 py-1 rounded-full bg-rose-400/15 border border-rose-400/40 text-rose-300 text-xs font-extrabold uppercase tracking-wider">
+          Screen-Free Activity Vault
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-bold mt-3">
+          Printable <span class="text-rose-400">PDF Learning Bundles</span>
+        </h2>
+        <p class="text-slate-400 mt-2 text-sm sm:text-base">
+          Flip through sample pages before adding to your cart! Use code <code class="px-2 py-0.5 rounded bg-slate-800 text-amber-300 font-bold">WONDER20</code> for 20% off.
+        </p>
+      </div>
+
+      <div id="bundles-grid" class="grid md:grid-cols-3 gap-7">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PARENT'S CORNER (PROGRESS TRACKER & TIPS)                           -->
+    <!-- =================================================================== -->
+    <section id="parents" class="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="wonder-card p-6 sm:p-10 border-purple-400/30">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div>
+            <span class="px-3.5 py-1 rounded-full bg-purple-400/15 border border-purple-400/40 text-purple-300 text-xs font-extrabold uppercase">
+              Parent's Corner
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold mt-2">
+              Little Explorer <span class="text-purple-400">Progress Dashboard</span>
+            </h2>
+          </div>
+          <button onclick="switchPage('page2')" class="btn-wonder px-5 py-3 rounded-2xl bg-purple-400 text-slate-950 font-bold text-sm">
+            <i class="fa-solid fa-certificate mr-1.5"></i> Print Achievement Certificate (Page 2)
+          </button>
+        </div>
+
+        <!-- Live Stats Grid -->
+        <div class="grid sm:grid-cols-3 gap-5 mb-8">
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-amber-400/15 text-amber-400 flex items-center justify-center text-2xl">
+              <i class="fa-solid fa-font"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase text-slate-400">Letters Traced</div>
+              <div id="parent-stat-letters" class="font-fredoka text-3xl font-bold text-white">0 / 26</div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-sky-400/15 text-sky-400 flex items-center justify-center text-2xl">
+              <i class="fa-solid fa-calculator"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase text-slate-400">Counting Score</div>
+              <div id="parent-stat-counting" class="font-fredoka text-3xl font-bold text-white">0 pts</div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-400/15 text-emerald-400 flex items-center justify-center text-2xl">
+              <i class="fa-solid fa-star"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase text-slate-400">Wonder Stars Earned</div>
+              <div id="parent-stat-stars" class="font-fredoka text-3xl font-bold text-emerald-400">12 ⭐</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Educator Tips -->
+        <div class="grid md:grid-cols-3 gap-5">
+          <div class="bg-slate-950/70 border border-slate-800/90 rounded-2xl p-5">
+            <h4 class="font-fredoka font-bold text-amber-300 text-lg mb-1.5">
+              <i class="fa-solid fa-ear-listen mr-2"></i>Phonics Before Letter Names
+            </h4>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Encourage your child to repeat the short phonetic sound ("/æ/ like apple") while tracing to build early reading confidence.
+            </p>
+          </div>
+          <div class="bg-slate-950/70 border border-slate-800/90 rounded-2xl p-5">
+            <h4 class="font-fredoka font-bold text-sky-300 text-lg mb-1.5">
+              <i class="fa-solid fa-hand-pointer mr-2"></i>One-to-One Correspondence
+            </h4>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              In the Counting Adventure, ask your little one to point to each glowing star out loud before selecting the number bubble.
+            </p>
+          </div>
+          <div class="bg-slate-950/70 border border-slate-800/90 rounded-2xl p-5">
+            <h4 class="font-fredoka font-bold text-emerald-300 text-lg mb-1.5">
+              <i class="fa-solid fa-print mr-2"></i>Screen-to-Paper Bridge
+            </h4>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Pair 10 minutes of digital play with our Page 2 printable worksheets and sticker board to reinforce fine-motor pencil grip.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- PAGE 2: ACTIVITY & PRINTABLE EXPLORER / REWARD STUDIO                 -->
+  <!-- ===================================================================== -->
+  <section id="page-2" class="hidden relative z-10 py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+    <!-- Page 2 Header Banner -->
+    <div class="wonder-card p-6 sm:p-10 border-sky-400/40 bg-gradient-to-r from-slate-900 via-indigo-950/90 to-slate-900">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-400/15 border border-sky-400/40 text-sky-300 text-xs font-extrabold uppercase">
+            <i class="fa-solid fa-wand-sparkles"></i> Page 2 • Screen-Free Studio &amp; Reward Vault
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-bold">
+            Printable Worksheet Explorer &amp; <span class="text-amber-400">Sticker Studio</span>
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base">
+            Preview full sample worksheets, create a personalized printable achievement certificate for your child, and decorate your interactive Wonder Sticker Board!
+          </p>
+        </div>
+
+        <button onclick="switchPage('page1')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-amber-400 text-slate-950 font-bold text-sm sm:text-base self-start lg:self-center">
+          <i class="fa-solid fa-arrow-left mr-2"></i>Back to Page 1: Wonder Land
+        </button>
+      </div>
+    </div>
+
+    <!-- 1. FULL PRINTABLE WORKSHEET PREVIEWER -->
+    <div class="wonder-card p-6 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-sky-300">
+            <i class="fa-solid fa-file-pdf text-rose-400 mr-2"></i>Free Sample Printable Worksheets
+          </h2>
+          <p class="text-sm text-slate-400">Select a worksheet below to inspect or print directly for screen-free table time.</p>
+        </div>
+        <button onclick="printActiveWorksheet()" class="btn-wonder px-5 py-2.5 rounded-xl bg-emerald-400 text-slate-950 font-bold text-sm">
+          <i class="fa-solid fa-print mr-1.5"></i> Print Current Worksheet
+        </button>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6">
+        <!-- Worksheet Selector List -->
+        <div class="lg:col-span-4 space-y-3" id="worksheet-selector-list">
+          <!-- Injected by JS -->
+        </div>
+
+        <!-- Live Worksheet Sheet Preview -->
+        <div class="lg:col-span-8">
+          <div id="worksheet-preview-sheet" class="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border-4 border-amber-300 min-h-[380px]">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CUSTOM PRINTABLE CERTIFICATE GENERATOR -->
+    <div class="wonder-card p-6 sm:p-8 border-amber-400/40">
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <!-- Controls -->
+        <div class="lg:col-span-5 space-y-4">
+          <span class="px-3 py-1 rounded-full bg-amber-400/15 text-amber-300 text-xs font-extrabold uppercase">
+            Keepsake Creator
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold">
+            Custom <span class="text-amber-400">Wonder Star Certificate</span>
+          </h2>
+          <p class="text-sm text-slate-400">
+            Celebrate your child's learning milestones! Type their name, choose an award badge, and print or save their certificate.
+          </p>
+
+          <div class="space-y-3 pt-2">
+            <div>
+              <label for="cert-child-name" class="block text-xs font-extrabold uppercase text-slate-300 mb-1">Child's Name</label>
+              <input id="cert-child-name" type="text" value="Leo the Explorer" oninput="updateCertificate()" placeholder="Enter child's name..." class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-bold focus:outline-none focus:border-amber-400" />
+            </div>
+
+            <div>
+              <label for="cert-award-title" class="block text-xs font-extrabold uppercase text-slate-300 mb-1">Achievement Award</label>
+              <select id="cert-award-title" onchange="updateCertificate()" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-bold focus:outline-none focus:border-amber-400">
+                <option value="Super Alphabet & Phonics Explorer">Super Alphabet &amp; Phonics Explorer</option>
+                <option value="Galactic Counting Champion">Galactic Counting Champion</option>
+                <option value="Master Animal Sound Detective">Master Animal Sound Detective</option>
+                <option value="Creative Starry Artist">Creative Starry Artist</option>
+              </select>
+            </div>
+
+            <button onclick="printCertificate()" class="btn-wonder w-full py-3.5 rounded-2xl bg-amber-400 text-slate-950 font-bold text-base mt-2">
+              <i class="fa-solid fa-print mr-2"></i> Print Official Certificate
+            </button>
+          </div>
+        </div>
+
+        <!-- Certificate Preview -->
+        <div class="lg:col-span-7">
+          <div id="certificate-card" class="rounded-3xl p-6 sm:p-10 bg-gradient-to-br from-amber-50 via-white to-sky-50 text-slate-900 border-8 border-double border-amber-400 shadow-2xl text-center relative overflow-hidden">
+            <div class="text-xs font-extrabold uppercase tracking-[0.25em] text-indigo-600">
+              ★ Little Wonder World Academy ★
+            </div>
+            <h3 class="font-fredoka text-3xl sm:text-4xl font-bold text-slate-900 mt-2">
+              Certificate of Wonder
+            </h3>
+            <p class="text-sm text-slate-600 mt-3">This starry honor is proudly presented to</p>
+            <div id="cert-preview-name" class="font-fredoka text-3xl sm:text-4xl font-bold text-indigo-700 my-3 border-b-2 border-dashed border-amber-400 inline-block px-6 pb-1">
+              Leo the Explorer
+            </div>
+            <p class="text-sm text-slate-600">for outstanding curiosity and joyful learning as a</p>
+            <div id="cert-preview-award" class="font-fredoka text-xl sm:text-2xl font-bold text-rose-600 mt-1">
+              Super Alphabet &amp; Phonics Explorer
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500 font-bold">
+              <span>Date: <span id="cert-date"></span></span>
+              <span class="text-2xl">🏅🌟🚀</span>
+              <span>Signed: Professor Hoot 🦉</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. INTERACTIVE STICKER REWARD BOARD -->
+    <div class="wonder-card p-6 sm:p-8 border-emerald-400/40">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-emerald-300">
+            <i class="fa-solid fa-face-smile-beam mr-2"></i>Interactive Wonder Sticker Board
+          </h2>
+          <p class="text-sm text-slate-400">Click any sticker below to place it onto your starry reward sky! Drag or click placed stickers to celebrate.</p>
+        </div>
+        <button onclick="clearStickerBoard()" class="px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs font-bold text-slate-300 hover:text-white">
+          Reset Board
+        </button>
+      </div>
+
+      <!-- Sticker Tray -->
+      <div class="flex flex-wrap items-center gap-3 bg-slate-900/90 p-4 rounded-2xl border border-slate-800 mb-5">
+        <span class="text-xs font-extrabold uppercase text-slate-400 mr-2">Sticker Pack:</span>
+        <button onclick="addStickerToBoard('🦄')" class="text-3xl hover:scale-125 transition p-1.5 bg-slate-800 rounded-xl">🦄</button>
+        <button onclick="addStickerToBoard('🚀')" class="text-3xl hover:scale-125 transition p-1.5 bg-slate-800 rounded-xl">🚀</button>
+        <button onclick="addStickerToBoard('🌈')" class="text-3xl hover:scale-125 transition p-1.5 bg-slate-800 rounded-xl">🌈</button>
+        <button onclick="addStickerToBoard('🦖')" class="text-3xl hover:scale-125 transition p-1.5 bg-slate-800 rounded-xl">🦖</button>
+        <button onclick="addStickerToBoard('🦉')" class="text-3xl hover:scale-125 transition p-1.5 bg-slate-800 rounded-xl">🦉</button>
+        <button onclick="addStickerToBoard('👑')" class="text-3xl hover:scale-125 transition p-1.5 bg-slate-800 rounded-xl">👑</button>
+        <button onclick="addStickerToBoard('🪐')" class="text-3xl hover:scale-125 transition p-1.5 bg-slate-800 rounded-xl">🪐</button>
+        <button onclick="addStickerToBoard('🍦')" class="text-3xl hover:scale-125 transition p-1.5 bg-slate-800 rounded-xl">🍦</button>
+      </div>
+
+      <!-- Starry Sky Sticker Canvas -->
+      <div id="sticker-board-canvas" class="relative h-64 sm:h-72 rounded-3xl bg-gradient-to-b from-indigo-950 via-slate-900 to-slate-950 border-2 border-dashed border-sky-400/50 overflow-hidden flex items-center justify-center">
+        <p id="sticker-board-hint" class="text-slate-500 font-fredoka text-lg pointer-events-none">
+          Tap stickers above to fill your night sky! ✨
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER WITH QUICK LINKS & NEWSLETTER SIGNUP                           -->
+  <!-- ===================================================================== -->
+  <footer class="relative z-10 mt-16 bg-slate-950 border-t border-slate-800/90 pt-12 pb-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-12 gap-8 pb-10 border-b border-slate-800">
+      <div class="md:col-span-5 space-y-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <span class="font-fredoka text-xl font-bold text-white">Little Wonder World</span>
+        </div>
+        <p class="text-sm text-slate-400 max-w-sm leading-relaxed">
+          Joyful, ad-free interactive learning and screen-free printable adventures designed to spark curiosity in every child.
+        </p>
+      </div>
+
+      <div class="md:col-span-3 space-y-2 text-sm">
+        <h4 class="font-fredoka font-bold text-amber-300 uppercase tracking-wider text-xs">Explore</h4>
+        <ul class="space-y-2 text-slate-400 font-semibold">
+          <li><a href="#playground" onclick="switchPage('page1')" class="hover:text-white transition">Alphabet &amp; Counting</a></li>
+          <li><a href="#library" onclick="switchPage('page1')" class="hover:text-white transition">Learning Library</a></li>
+          <li><a href="#store" onclick="switchPage('page1')" class="hover:text-white transition">Printable PDF Bundles</a></li>
+          <li><button onclick="switchPage('page2')" class="hover:text-sky-400 transition">Page 2: Studio &amp; Certificate</button></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-4 space-y-3">
+        <h4 class="font-fredoka font-bold text-sky-300 uppercase tracking-wider text-xs">Free Weekly Printable Club</h4>
+        <p class="text-xs text-slate-400">Get 3 free screen-free coloring &amp; tracing sheets sent every Friday!</p>
+        <form onsubmit="handleNewsletterSubmit(event)" class="flex gap-2">
+          <input id="newsletter-email" type="email" required placeholder="parent@example.com" class="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-sky-400" />
+          <button type="submit" class="btn-wonder px-4 py-2.5 rounded-xl bg-sky-400 text-slate-950 font-bold text-sm">
+            Join
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <p>© 2026 Little Wonder World. Crafted with ❤️ for curious kids everywhere.</p>
+      <div class="flex items-center gap-4">
+        <span>COPPA Kid-Safe Design</span>
+        <span>•</span>
+        <span>Zero External Ads</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- FLIPBOOK PREVIEW MODAL (FOR PDF BUNDLES & LIBRARY ACTIVITIES)         -->
+  <!-- ===================================================================== -->
+  <div id="flipbook-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="wonder-card max-w-2xl w-full p-6 sm:p-8 border-2 border-amber-400/50 animate-pop relative">
+      <button onclick="closeFlipbookModal()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-slate-800 hover:bg-rose-500 text-white flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <span id="modal-badge" class="px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-extrabold uppercase">
+          Sample Flipbook
+        </span>
+        <span id="modal-page-indicator" class="text-xs font-bold text-slate-400">Page 1 of 3</span>
+      </div>
+
+      <h3 id="modal-title" class="font-fredoka text-2xl font-bold text-white mb-4">Bundle Title</h3>
+
+      <!-- Flipbook Page Sheet -->
+      <div id="modal-page-content" class="bg-white text-slate-900 rounded-2xl p-6 min-h-[240px] border-4 border-sky-300 shadow-inner flex flex-col justify-between">
+        <!-- Injected by JS -->
+      </div>
+
+      <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <button onclick="changeFlipbookPage(-1)" class="btn-wonder px-4 py-2 rounded-xl bg-slate-800 text-white font-bold text-sm">
+            <i class="fa-solid fa-chevron-left mr-1"></i> Prev Page
+          </button>
+          <button onclick="changeFlipbookPage(1)" class="btn-wonder px-4 py-2 rounded-xl bg-slate-800 text-white font-bold text-sm">
+            Next Page <i class="fa-solid fa-chevron-right ml-1"></i>
+          </button>
+        </div>
+
+        <button id="modal-add-cart-btn" class="btn-wonder px-5 py-2.5 rounded-xl bg-amber-400 text-slate-950 font-bold text-sm">
+          <i class="fa-solid fa-cart-plus mr-1.5"></i> Add Bundle to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- SLIDE-OUT SHOPPING CART DRAWER                                        -->
+  <!-- ===================================================================== -->
+  <div id="cart-overlay" onclick="toggleCart(false)" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-slate-900 border-l border-slate-800 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+    <!-- Cart Header -->
+    <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <i class="fa-solid fa-basket-shopping text-sky-400 text-xl"></i>
+        <h3 class="font-fredoka text-xl font-bold">Your Wonder Cart</h3>
+      </div>
+      <button onclick="toggleCart(false)" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-rose-500 text-slate-300 hover:text-white flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Cart Items List -->
+    <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4">
+      <!-- Injected by JS -->
+    </div>
+
+    <!-- Promo Code & Totals -->
+    <div class="p-6 border-t border-slate-800 bg-slate-950/80 space-y-4">
+      <div class="flex gap-2">
+        <input id="promo-code-input" type="text" placeholder="Promo code (try WONDER20)" class="flex-1 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white uppercase focus:outline-none focus:border-amber-400" />
+        <button onclick="applyPromoCode()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-amber-400 hover:text-slate-950 text-amber-300 font-bold text-xs transition">
+          Apply
+        </button>
+      </div>
+
+      <div class="space-y-1.5 text-sm">
+        <div class="flex justify-between text-slate-400">
+          <span>Subtotal</span>
+          <span id="cart-subtotal">$0.00</span>
+        </div>
+        <div id="cart-discount-row" class="hidden flex justify-between text-emerald-400 font-bold">
+          <span>Promo Discount (20%)</span>
+          <span id="cart-discount">-$0.00</span>
+        </div>
+        <div class="flex justify-between text-lg font-fredoka font-bold text-white pt-2 border-t border-slate-800">
+          <span>Total</span>
+          <span id="cart-total" class="text-amber-400">$0.00</span>
+        </div>
+      </div>
+
+      <button onclick="checkoutCart()" class="btn-wonder w-full py-3.5 rounded-2xl bg-emerald-400 text-slate-950 font-bold text-base">
+        <i class="fa-solid fa-lock mr-2"></i> Instant Digital Checkout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Hidden Printable Container for Clean Printing -->
+  <div id="printable-area" class="hidden"></div>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT APPLICATION LOGIC                                          -->
+  <!-- ===================================================================== -->
+  <script>
+    /* -----------------------------------------------------------------------
+       1. APPLICATION STATE & DATA
+    ----------------------------------------------------------------------- */
+    const state = {
+      stars: 12,
+      tracedLetters: new Set(),
+      currentLetterIndex: 0,
+      traceColor: '#FBBF24',
+      countingScore: 0,
+      countingStreak: 0,
+      countingTarget: 5,
+      countingEmoji: '⭐',
+      doodleColor: '#FBBF24',
+      doodleSize: 8,
+      cart: [],
+      promoApplied: false,
+      flipbookBundleId: null,
+      flipbookPageIdx: 0,
+      activeWorksheetIdx: 0
+    };
+
+    const ALPHABET_DATA = [
+      { letter: 'A', lower: 'a', word: 'Apple', emoji: '🍎', sound: '/æ/' },
+      { letter: 'B', lower: 'b', word: 'Bear', emoji: '🐻', sound: '/b/' },
+      { letter: 'C', lower: 'c', word: 'Cat', emoji: '🐱', sound: '/k/' },
+      { letter: 'D', lower: 'd', word: 'Dinosaur', emoji: '🦕', sound: '/d/' },
+      { letter: 'E', lower: 'e', word: 'Elephant', emoji: '🐘', sound: '/ɛ/' },
+      { letter: 'F', lower: 'f', word: 'Frog', emoji: '🐸', sound: '/f/' },
+      { letter: 'G', lower: 'g', word: 'Giraffe', emoji: '🦒', sound: '/g/' },
+      { letter: 'H', lower: 'h', word: 'Hedgehog', emoji: '🦔', sound: '/h/' },
+      { letter: 'I', lower: 'i', word: 'Igloo', emoji: '🧊', sound: '/ɪ/' },
+      { letter: 'J', lower: 'j', word: 'Jellyfish', emoji: '🪼', sound: '/dʒ/' },
+      { letter: 'K', lower: 'k', word: 'Koala', emoji: '🐨', sound: '/k/' },
+      { letter: 'L', lower: 'l', word: 'Lion', emoji: '🦁', sound: '/l/' },
+      { letter: 'M', lower: 'm', word: 'Monkey', emoji: '🐵', sound: '/m/' },
+      { letter: 'N', lower: 'n', word: 'Narwhal', emoji: '🦄', sound: '/n/' },
+      { letter: 'O', lower: 'o', word: 'Owl', emoji: '🦉', sound: '/ɒ/' },
+      { letter: 'P', lower: 'p', word: 'Penguin', emoji: '🐧', sound: '/p/' },
+      { letter: 'Q', lower: 'q', word: 'Queen Bee', emoji: '🐝', sound: '/kw/' },
+      { letter: 'R', lower: 'r', word: 'Rocket', emoji: '🚀', sound: '/r/' },
+      { letter: 'S', lower: 's', word: 'Starfish', emoji: '⭐', sound: '/s/' },
+      { letter: 'T', lower: 't', word: 'Turtle', emoji: '🐢', sound: '/t/' },
+      { letter: 'U', lower: 'u', word: 'Unicorn', emoji: '🦄', sound: '/juː/' },
+      { letter: 'V', lower: 'v', word: 'Volcano', emoji: '🌋', sound: '/v/' },
+      { letter: 'W', lower: 'w', word: 'Whale', emoji: '🐳', sound: '/w/' },
+      { letter: 'X', lower: 'x', word: 'Xylophone', emoji: '🎶', sound: '/ks/' },
+      { letter: 'Y', lower: 'y', word: 'Yak', emoji: '🐂', sound: '/j/' },
+      { letter: 'Z', lower: 'z', word: 'Zebra', emoji: '🦓', sound: '/z/' }
+    ];
+
+    const ANIMALS_DATA = [
+      { name: 'Barn Owl', emoji: '🦉', soundText: 'Hoo-hoo! Hoo-hoo!', freq: [520, 440], fact: 'Owls can turn their heads almost all the way around to spot mice in the dark!', color: 'border-purple-400/40' },
+      { name: 'Friendly Lion', emoji: '🦁', soundText: 'Roaaar! Roooar!', freq: [160, 110], fact: 'A lion’s mighty roar can be heard up to five miles away across the savanna!', color: 'border-amber-400/40' },
+      { name: 'Tree Frog', emoji: '🐸', soundText: 'Ribbit! Ribbit!', freq: [340, 580], fact: 'Frogs drink water right through their skin instead of using a cup!', color: 'border-emerald-400/40' },
+      { name: 'Blue Whale', emoji: '🐳', soundText: 'Woooo-eeee-oooo!', freq: [260, 390], fact: 'Blue whales are the largest animals on Earth and sing songs across the ocean!', color: 'border-sky-400/40' },
+      { name: 'Honey Bee', emoji: '🐝', soundText: 'Bzzzz-bzzzz!', freq: [220, 240], fact: 'Bees dance in a figure-eight wiggle to tell friends where the sweetest flowers grow!', color: 'border-yellow-400/40' },
+      { name: 'Sleepy Cat', emoji: '🐱', soundText: 'Mee-ow! Purrrr!', freq: [480, 620], fact: 'Cats have special whiskers that help them feel their way in the starry dark!', color: 'border-rose-400/40' }
+    ];
+
+    const LIBRARY_ACTIVITIES = [
+      {
+        title: 'Starry Letter Shapes',
+        age: 'Ages 2-4',
+        subject: 'Phonics',
+        emoji: '🔤',
+        desc: 'Match big uppercase letters with their playful lowercase twins.',
+        pages: [
+          { heading: 'Activity 1: Big & Little Match', body: 'Draw a line from Big A to little a (🍎), Big B to little b (🐻), and Big C to little c (🐱).' },
+          { heading: 'Activity 2: Sound Safari', body: 'Find 3 things in your room that start with the /b/ sound like Ball, Book, and Bear!' }
+        ]
+      },
+      {
+        title: 'Moonbeam Counting 1–10',
+        age: 'Ages 2-4',
+        subject: 'Math',
+        emoji: '🌙',
+        desc: 'Count glowing moons, rockets, and planets with finger-tap fun.',
+        pages: [
+          { heading: 'Count the Rockets', body: '🚀 🚀 🚀 — How many rockets are blasting off? Count out loud: 1, 2, 3!' },
+          { heading: 'Starry Ten-Frame', body: 'Color 5 stars yellow and 5 stars blue to make 10 shining stars!' }
+        ]
+      },
+      {
+        title: 'Phonics Rhyme Time',
+        age: 'Ages 4-6',
+        subject: 'Phonics',
+        emoji: '🎵',
+        desc: 'Spot rhyming word pairs like Cat–Hat and Star–Car.',
+        pages: [
+          { heading: 'Rhyme Match', body: 'Which word rhymes with CAT? 🎩 Hat or 🐟 Fish? Circle the Hat!' },
+          { heading: 'Silly Poem Builder', body: 'The little frog sat on a ____ (log)! Say it out loud!' }
+        ]
+      },
+      {
+        title: 'Solar System Explorers',
+        age: 'Ages 4-6',
+        subject: 'Science',
+        emoji: '🪐',
+        desc: 'Discover why the moon glows and meet the ringed planet Saturn.',
+        pages: [
+          { heading: 'Meet Planet Saturn', body: 'Saturn has sparkling rings made of ice and space rocks! Count 3 rings around Saturn.' },
+          { heading: 'Day & Night Spin', body: 'Earth spins like a top every 24 hours, giving us sunny mornings and starry bedtimes!' }
+        ]
+      },
+      {
+        title: 'Shape Castle Builder',
+        age: 'Ages 2-4',
+        subject: 'Math',
+        emoji: '🏰',
+        desc: 'Identify circles, triangles, and squares hidden inside Wonder Castle.',
+        pages: [
+          { heading: 'Triangle Roofs', body: 'Count how many triangle roofs sit atop Wonder Castle towers!' },
+          { heading: 'Square Windows', body: 'Draw 4 square windows and 1 round moon window on your castle.' }
+        ]
+      },
+      {
+        title: 'Garden Bug Detectives',
+        age: 'Ages 4-6',
+        subject: 'Science',
+        emoji: '🐞',
+        desc: 'Learn how caterpillars transform into colorful butterflies.',
+        pages: [
+          { heading: 'Butterfly Life Cycle', body: '1. Tiny Egg → 2. Hungry Caterpillar → 3. Cozy Chrysalis → 4. Beautiful Butterfly!' },
+          { heading: 'Ladybug Spots', body: 'Count 4 spots on the left wing and 4 spots on the right wing: 4 + 4 = 8!' }
+        ]
+      }
+    ];
+
+    const BUNDLES_DATA = [
+      {
+        id: 'bundle-abc',
+        title: 'Starry Alphabet & Tracing Mega-Pack',
+        pagesCount: '32 Printable PDF Pages',
+        ageRange: 'Ages 3–6',
+        price: 9.99,
+        emoji: '✏️',
+        badge: 'Bestseller',
+        color: 'from-amber-400/20 to-orange-500/10',
+        desc: 'Full A–Z dotted tracing sheets, phonics coloring cards, and letter maze puzzles.',
+        samplePages: [
+          { heading: 'Page 1: Letter A Tracing & Apple Maze', body: 'Trace uppercase A and lowercase a 6 times, then guide the friendly worm to the red apple! 🍎' },
+          { heading: 'Page 2: Beginning Sounds Cut-and-Paste', body: 'Cut out the Bear, Cat, and Dog tiles and glue them under B, C, and D!' },
+          { heading: 'Page 3: Rainbow Letter Scavenger Hunt', body: 'Color every hidden letter S in yellow to reveal a secret shooting star!' }
+        ]
+      },
+      {
+        id: 'bundle-math',
+        title: 'Cosmic Counting & Number Sense Kit',
+        pagesCount: '28 Printable PDF Pages',
+        ageRange: 'Ages 3–6',
+        price: 8.99,
+        emoji: '🚀',
+        badge: 'Parent Favorite',
+        color: 'from-sky-400/20 to-indigo-500/10',
+        desc: 'Numbers 1–20 ten-frames, connect-the-constellations, and playful addition games.',
+        samplePages: [
+          { heading: 'Page 1: Connect the Stars 1 to 15', body: 'Connect dots 1 through 15 in order to reveal a blasting space rocket! 🚀' },
+          { heading: 'Page 2: Alien Ten-Frame Counting', body: 'Draw the matching number of green aliens inside each spaceship window.' },
+          { heading: 'Page 3: Planet Size Ordering', body: 'Cut and arrange Mercury, Earth, Saturn, and Jupiter from smallest to biggest!' }
+        ]
+      },
+      {
+        id: 'bundle-quiet',
+        title: 'Rainy Day Quiet-Time Activity Vault',
+        pagesCount: '45 Printable PDF Pages',
+        ageRange: 'Ages 2–7',
+        price: 12.99,
+        emoji: '🌈',
+        badge: 'Best Value',
+        color: 'from-emerald-400/20 to-teal-500/10',
+        desc: 'Mazes, spot-the-difference, symmetry drawing, scissor skills, and reward stickers.',
+        samplePages: [
+          { heading: 'Page 1: Scissor Skills Wavy Paths', body: 'Practice safe snipping along dotted rocket trails and rainbow bridges!' },
+          { heading: 'Page 2: Forest Friends Spot-the-Difference', body: 'Find 5 playful differences between two cozy woodland owl scenes.' },
+          { heading: 'Page 3: Printable Reward Badges', body: 'Color and cut out 12 Wonder Star medals for your home fridge chart!' }
+        ]
+      }
+    ];
+
+    const SAMPLE_WORKSHEETS = [
+      {
+        title: 'Worksheet 1: Dotted Alphabet A–D',
+        subtitle: 'Ages 3–5 • Fine Motor & Phonics',
+        html: `
+          <div class="flex justify-between items-center border-b-2 border-slate-200 pb-3 mb-4">
+            <div>
+              <h3 class="font-fredoka text-2xl font-bold text-indigo-700">Starry Alphabet Tracing: A – D</h3>
+              <p class="text-xs text-slate-500 font-bold">Name: ________________________   Stars Earned: ☆☆☆</p>
+            </div>
+            <span class="text-3xl">🍎🐻🐱🦕</span>
+          </div>
+          <div class="space-y-4 font-fredoka text-3xl tracking-widest text-slate-400">
+            <div class="p-3 rounded-xl bg-amber-50 border-2 border-dashed border-amber-300 flex items-center justify-between">
+              <span class="text-slate-900 font-bold">A a</span>
+              <span>A  a  A  a  A  a</span>
+              <span>🍎 Apple</span>
+            </div>
+            <div class="p-3 rounded-xl bg-sky-50 border-2 border-dashed border-sky-300 flex items-center justify-between">
+              <span class="text-slate-900 font-bold">B b</span>
+              <span>B  b  B  b  B  b</span>
+              <span>🐻 Bear</span>
+            </div>
+            <div class="p-3 rounded-xl bg-rose-50 border-2 border-dashed border-rose-300 flex items-center justify-between">
+              <span class="text-slate-900 font-bold">C c</span>
+              <span>C  c  C  c  C  c</span>
+              <span>🐱 Cat</span>
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-50 border-2 border-dashed border-emerald-300 flex items-center justify-between">
+              <span class="text-slate-900 font-bold">D d</span>
+              <span>D  d  D  d  D  d</span>
+              <span>🦕 Dino</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        title: 'Worksheet 2: Count & Circle 1–5',
+        subtitle: 'Ages 2–5 • Early Math',
+        html: `
+          <div class="flex justify-between items-center border-b-2 border-slate-200 pb-3 mb-4">
+            <div>
+              <h3 class="font-fredoka text-2xl font-bold text-sky-700">Space Object Count &amp; Circle</h3>
+              <p class="text-xs text-slate-500 font-bold">Count the space items and circle the matching number!</p>
+            </div>
+            <span class="text-3xl">🚀🪐⭐</span>
+          </div>
+          <div class="space-y-4 text-lg font-bold">
+            <div class="p-3.5 rounded-xl bg-slate-100 flex items-center justify-between">
+              <span class="text-2xl">🚀 🚀 🚀</span>
+              <span class="font-fredoka text-xl tracking-widest">2   &nbsp;  ( 3 )  &nbsp;   5</span>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-100 flex items-center justify-between">
+              <span class="text-2xl">⭐ ⭐ ⭐ ⭐ ⭐</span>
+              <span class="font-fredoka text-xl tracking-widest">1   &nbsp;   4   &nbsp;  ( 5 )</span>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-100 flex items-center justify-between">
+              <span class="text-2xl">🪐 🪐</span>
+              <span class="font-fredoka text-xl tracking-widest">( 2 )  &nbsp;   3   &nbsp;   4</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        title: 'Worksheet 3: Symmetry Star Coloring',
+        subtitle: 'Ages 4–7 • Art & Geometry',
+        html: `
+          <div class="flex justify-between items-center border-b-2 border-slate-200 pb-3 mb-4">
+            <div>
+              <h3 class="font-fredoka text-2xl font-bold text-emerald-700">Design Your Own Wonder Planet</h3>
+              <p class="text-xs text-slate-500 font-bold">Draw rings, moons, and friendly aliens around the planet below!</p>
+            </div>
+            <span class="text-3xl">🎨✨</span>
+          </div>
+          <div class="h-52 rounded-2xl border-4 border-dashed border-indigo-300 flex flex-col items-center justify-center bg-indigo-50/40">
+            <div class="w-24 h-24 rounded-full border-4 border-dashed border-amber-500 flex items-center justify-center text-4xl">
+              🌍
+            </div>
+            <p class="text-xs text-slate-500 font-bold mt-3">Color me &amp; add 5 twinkling stars around my orbit!</p>
+          </div>
+        `
+      }
+    ];
+
+    /* -----------------------------------------------------------------------
+       2. INITIALIZATION & STARFIELD
+    ----------------------------------------------------------------------- */
+    window.addEventListener('DOMContentLoaded', () => {
+      generateStarfield();
+      renderAlphabetGrid();
+      selectLetter(0);
+      initTracingCanvas();
+      initCountingGame();
+      renderAnimalCards();
+      renderLibrary('All');
+      initDoodleCanvas();
+      renderBundles();
+      renderCart();
+      renderWorksheetSelector();
+      selectWorksheet(0);
+      document.getElementById('cert-date').textContent = new Date().toLocaleDateString('en-US', {
+        month: 'long', day: 'numeric', year: 'numeric'
+      });
+    });
+
+    function generateStarfield() {
+      const container = document.getElementById('starfield');
+      const count = 65;
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        star.className = 'star-dot';
+        const size = (Math.random() * 3 + 1.5).toFixed(1) + 'px';
+        star.style.width = size;
+        star.style.height = size;
+        star.style.left = (Math.random() * 100).toFixed(2) + '%';
+        star.style.top = (Math.random() * 100).toFixed(2) + '%';
+        star.style.setProperty('--dur', (Math.random() * 3 + 2).toFixed(1) + 's');
+        star.style.animationDelay = (Math.random() * 4).toFixed(1) + 's';
+        container.appendChild(star);
+      }
+    }
+
+    /* -----------------------------------------------------------------------
+       3. MULTI-PAGE NAVIGATION (PAGE 1 <-> PAGE 2)
+    ----------------------------------------------------------------------- */
+    function switchPage(pageId) {
+      const p1 = document.getElementById('page-1');
+      const p2 = document.getElementById('page-2');
+      const btn1 = document.getElementById('nav-page1-btn');
+      const btn2 = document.getElementById('nav-page2-btn');
+      const subnav = document.getElementById('page1-subnav');
+
+      if (pageId === 'page1') {
+        p1.classList.remove('hidden');
+        p2.classList.add('hidden');
+        btn1.className = 'px-3 sm:px-4 py-2 rounded-xl font-fredoka text-xs sm:text-sm font-semibold transition-all bg-amber-400 text-slate-950 shadow';
+        btn2.className = 'px-3 sm:px-4 py-2 rounded-xl font-fredoka text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
+        subnav.classList.remove('xl:hidden');
+        resizeTracingCanvas();
+        resizeDoodleCanvas();
+      } else {
+        p1.classList.add('hidden');
+        p2.classList.remove('hidden');
+        btn2.className = 'px-3 sm:px-4 py-2 rounded-xl font-fredoka text-xs sm:text-sm font-semibold transition-all bg-sky-400 text-slate-950 shadow';
+        btn1.className = 'px-3 sm:px-4 py-2 rounded-xl font-fredoka text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
+        subnav.classList.add('xl:hidden');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* -----------------------------------------------------------------------
+       4. WEB AUDIO API SYNTHESIZER & WEB SPEECH PHONICS
+    ----------------------------------------------------------------------- */
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playSuccessChime() {
+      try {
+        const ctx = getAudioCtx();
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
+          gain.gain.setValueAtTime(0.14, ctx.currentTime + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.08 + 0.35);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + i * 0.08);
+          osc.stop(ctx.currentTime + i * 0.08 + 0.36);
+        });
+      } catch (e) {}
+    }
+
+    function playBoopSound() {
+      try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(220, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.26);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.27);
+      } catch (e) {}
+    }
+
+    function playAnimalSynth(freqs) {
+      try {
+        const ctx = getAudioCtx();
+        freqs.forEach((f, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(f, ctx.currentTime + idx * 0.18);
+          osc.frequency.exponentialRampToValueAtTime(f * 1.15, ctx.currentTime + idx * 0.18 + 0.16);
+          gain.gain.setValueAtTime(0.09, ctx.currentTime + idx * 0.18);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.18 + 0.22);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.18);
+          osc.stop(ctx.currentTime + idx * 0.18 + 0.24);
+        });
+      } catch (e) {}
+    }
+
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = 0.92;
+        utter.pitch = 1.15;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    /* -----------------------------------------------------------------------
+       5. PLAYGROUND TABS & ALPHABET TRACING CANVAS
+    ----------------------------------------------------------------------- */
+    function switchPlaygroundTab(tabName) {
+      const tabs = ['tracing', 'counting', 'animals'];
+      tabs.forEach(t => {
+        const panel = document.getElementById(`tab-panel-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabName) {
+          panel.classList.remove('hidden');
+          btn.className = 'btn-wonder px-6 py-3.5 rounded-2xl bg-amber-400 text-slate-950 font-bold text-sm sm:text-base flex items-center gap-2';
+        } else {
+          panel.classList.add('hidden');
+          btn.className = 'btn-wonder px-6 py-3.5 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm sm:text-base flex items-center gap-2';
+        }
+      });
+      if (tabName === 'tracing') {
+        setTimeout(resizeTracingCanvas, 30);
+      }
+    }
+
+    function renderAlphabetGrid() {
+      const grid = document.getElementById('alphabet-grid');
+      grid.innerHTML = ALPHABET_DATA.map((item, idx) => {
+        const isTraced = state.tracedLetters.has(item.letter);
+        const isSelected = idx === state.currentLetterIndex;
+        return `
+          <button
+            onclick="selectLetter(${idx})"
+            class="h-11 rounded-xl font-fredoka font-bold text-base transition flex items-center justify-center relative
+              ${isSelected ? 'bg-amber-400 text-slate-950 scale-105 shadow-lg' : 'bg-slate-900 text-slate-200 hover:bg-slate-800 border border-slate-700'}">
+            ${item.letter}
+            ${isTraced ? '<span class="absolute -top-1 -right-1 text-[10px]">⭐</span>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectLetter(idx) {
+      state.currentLetterIndex = idx;
+      const item = ALPHABET_DATA[idx];
+      document.getElementById('current-letter-emoji').textContent = item.emoji;
+      document.getElementById('current-letter-display').textContent = `${item.letter} ${item.lower}`;
+      document.getElementById('current-phonics-sound').textContent = `${item.sound} sound`;
+      document.getElementById('current-letter-word').textContent = `${item.letter} is for ${item.word}`;
+      document.getElementById('trace-celebration-banner').classList.add('hidden');
+      renderAlphabetGrid();
+      clearTracingCanvas();
+      speakCurrentLetter();
+    }
+
+    function speakCurrentLetter() {
+      const item = ALPHABET_DATA[state.currentLetterIndex];
+      speakText(`${item.letter}! ${item.letter} is for ${item.word}.`);
+    }
+
+    let traceCanvas, traceCtx, isTracing = false, lastTracePt = null;
+
+    function initTracingCanvas() {
+      traceCanvas = document.getElementById('tracing-canvas');
+      traceCtx = traceCanvas.getContext('2d');
+      resizeTracingCanvas();
+
+      const getPos = (e) => {
+        const rect = traceCanvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+      };
+
+      const start = (e) => {
+        e.preventDefault();
+        isTracing = true;
+        lastTracePt = getPos(e);
+      };
+
+      const move = (e) => {
+        if (!isTracing) return;
+        e.preventDefault();
+        const pt = getPos(e);
+        traceCtx.strokeStyle = state.traceColor;
+        traceCtx.lineWidth = 14;
+        traceCtx.lineCap = 'round';
+        traceCtx.lineJoin = 'round';
+        traceCtx.shadowColor = state.traceColor;
+        traceCtx.shadowBlur = 10;
+
+        traceCtx.beginPath();
+        traceCtx.moveTo(lastTracePt.x, lastTracePt.y);
+        traceCtx.lineTo(pt.x, pt.y);
+        traceCtx.stroke();
+        traceCtx.shadowBlur = 0;
+        lastTracePt = pt;
+      };
+
+      const end = () => {
+        isTracing = false;
+        lastTracePt = null;
+      };
+
+      traceCanvas.addEventListener('mousedown', start);
+      traceCanvas.addEventListener('mousemove', move);
+      window.addEventListener('mouseup', end);
+
+      traceCanvas.addEventListener('touchstart', start, { passive: false });
+      traceCanvas.addEventListener('touchmove', move, { passive: false });
+      traceCanvas.addEventListener('touchend', end);
+
+      window.addEventListener('resize', () => {
+        resizeTracingCanvas();
+        resizeDoodleCanvas();
+      });
+    }
+
+    function resizeTracingCanvas() {
+      if (!traceCanvas) return;
+      const rect = traceCanvas.parentElement.getBoundingClientRect();
+      if (rect.width === 0) return;
+      traceCanvas.width = rect.width;
+      traceCanvas.height = 300;
+      drawLetterGuide();
+    }
+
+    function drawLetterGuide() {
+      if (!traceCtx) return;
+      const w = traceCanvas.width;
+      const h = traceCanvas.height;
+      traceCtx.clearRect(0, 0, w, h);
+
+      // Subtle ruled handwriting lines
+      traceCtx.save();
+      traceCtx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
+      traceCtx.lineWidth = 2;
+      traceCtx.setLineDash([8, 8]);
+      [h * 0.22, h * 0.52, h * 0.82].forEach(y => {
+        traceCtx.beginPath();
+        traceCtx.moveTo(24, y);
+        traceCtx.lineTo(w - 24, y);
+        traceCtx.stroke();
+      });
+      traceCtx.restore();
+
+      // Dotted Guide Letter
+      const item = ALPHABET_DATA[state.currentLetterIndex];
+      const text = `${item.letter} ${item.lower}`;
+      traceCtx.save();
+      traceCtx.font = `700 ${Math.min(w * 0.34, 175)}px Fredoka, sans-serif`;
+      traceCtx.textAlign = 'center';
+      traceCtx.textBaseline = 'middle';
+      traceCtx.fillStyle = 'rgba(148, 163, 184, 0.14)';
+      traceCtx.fillText(text, w / 2, h / 2 + 8);
+
+      traceCtx.strokeStyle = 'rgba(251, 191, 36, 0.65)';
+      traceCtx.lineWidth = 3;
+      traceCtx.setLineDash([7, 7]);
+      traceCtx.strokeText(text, w / 2, h / 2 + 8);
+      traceCtx.restore();
+    }
+
+    function clearTracingCanvas() {
+      drawLetterGuide();
+    }
+
+    function setTraceColor(hex, btnEl) {
+      state.traceColor = hex;
+      document.querySelectorAll('.trace-color-btn').forEach(b => b.classList.remove('ring-2', 'ring-white', 'scale-110'));
+      if (btnEl) btnEl.classList.add('ring-2', 'ring-white', 'scale-110');
+    }
+
+    function completeTracingLetter() {
+      const item = ALPHABET_DATA[state.currentLetterIndex];
+      if (!state.tracedLetters.has(item.letter)) {
+        state.tracedLetters.add(item.letter);
+        addStars(1);
+      }
+      document.getElementById('traced-count-badge').textContent = state.tracedLetters.size;
+      document.getElementById('parent-stat-letters').textContent = `${state.tracedLetters.size} / 26`;
+      document.getElementById('trace-celebration-banner').classList.remove('hidden');
+      renderAlphabetGrid();
+      playSuccessChime();
+      spawnConfetti(window.innerWidth * 0.6, window.innerHeight * 0.5);
+      speakText(`Awesome job tracing ${item.letter}!`);
+    }
+
+    function nextTracingLetter() {
+      const nextIdx = (state.currentLetterIndex + 1) % ALPHABET_DATA.length;
+      selectLetter(nextIdx);
+    }
+
+    /* -----------------------------------------------------------------------
+       6. COUNTING ADVENTURE GAME
+    ----------------------------------------------------------------------- */
+    const COUNTING_THEMES = [
+      { emoji: '⭐', name: 'glowing stars' },
+      { emoji: '🚀', name: 'space rockets' },
+      { emoji: '🦉', name: 'sleepy owls' },
+      { emoji: '🪐', name: 'ringed planets' },
+      { emoji: '🍓', name: 'sweet strawberries' },
+      { emoji: '🐢', name: 'friendly turtles' }
+    ];
+
+    function initCountingGame() {
+      const target = Math.floor(Math.random() * 10) + 1; // 1 to 10
+      const theme = COUNTING_THEMES[Math.floor(Math.random() * COUNTING_THEMES.length)];
+      state.countingTarget = target;
+      state.countingEmoji = theme.emoji;
+
+      document.getElementById('counting-question-text').textContent =
+        `How many ${theme.name} do you see?`;
+      document.getElementById('counting-feedback').textContent = '';
+
+      const arena = document.getElementById('counting-arena');
+      arena.innerHTML = '';
+      for (let i = 0; i < target; i++) {
+        const span = document.createElement('button');
+        span.type = 'button';
+        span.className = 'text-4xl sm:text-5xl p-3 rounded-2xl bg-slate-900/90 border border-slate-700 hover:scale-125 active:scale-95 transition animate-pop cursor-pointer select-none';
+        span.style.animationDelay = `${i * 0.05}s`;
+        span.textContent = theme.emoji;
+        span.title = `Item #${i + 1}`;
+        span.onclick = () => {
+          span.classList.add('ring-2', 'ring-amber-400', 'bg-amber-400/20');
+          speakText(`${i + 1}`);
+        };
+        arena.appendChild(span);
+      }
+
+      // Generate 4 unique multiple-choice options
+      const opts = new Set([target]);
+      while (opts.size < 4) {
+        opts.add(Math.floor(Math.random() * 10) + 1);
+      }
+      const shuffled = Array.from(opts).sort(() => Math.random() - 0.5);
+
+      const optionsBox = document.getElementById('counting-options');
+      optionsBox.innerHTML = shuffled.map(num => `
+        <button onclick="checkCountingAnswer(${num}, this)"
+          class="btn-wonder w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-white font-fredoka text-2xl sm:text-3xl font-bold flex items-center justify-center shadow-lg">
+          ${num}
+        </button>
+      `).join('');
+    }
+
+    function checkCountingAnswer(chosen, btnEl) {
+      const feedback = document.getElementById('counting-feedback');
+      if (chosen === state.countingTarget) {
+        state.countingStreak += 1;
+        state.countingScore += 10;
+        addStars(1);
+        document.getElementById('counting-streak').textContent = state.countingStreak;
+        document.getElementById('counting-score').textContent = state.countingScore;
+        document.getElementById('parent-stat-counting').textContent = `${state.countingScore} pts`;
+        feedback.textContent = `🎉 Yay! There are ${state.countingTarget}! +1 Wonder Star!`;
+        feedback.className = 'h-7 font-fredoka text-lg font-semibold text-emerald-400';
+        playSuccessChime();
+        const rect = btnEl.getBoundingClientRect();
+        spawnConfetti(rect.left + rect.width / 2, rect.top);
+        speakText(`Yay! ${state.countingTarget}! Great counting!`);
+        setTimeout(initCountingGame, 1400);
+      } else {
+        state.countingStreak = 0;
+        document.getElementById('counting-streak').textContent = 0;
+        feedback.textContent = `Not quite ${chosen} — tap each item to count together!`;
+        feedback.className = 'h-7 font-fredoka text-lg font-semibold text-rose-400';
+        playBoopSound();
+        speakText(`Try counting them one by one!`);
+      }
+    }
+
+    /* -----------------------------------------------------------------------
+       7. ANIMAL SOUNDS & FUN FACTS
+    ----------------------------------------------------------------------- */
+    function renderAnimalCards() {
+      const grid = document.getElementById('animal-cards-grid');
+      grid.innerHTML = ANIMALS_DATA.map((animal, idx) => `
+        <div onclick="triggerAnimalCard(${idx})"
+          class="cursor-pointer bg-slate-900/90 hover:bg-slate-800/95 border-2 ${animal.color} rounded-2xl p-5 transition transform hover:-translate-y-1 flex flex-col justify-between gap-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-4xl">${animal.emoji}</span>
+              <div>
+                <h4 class="font-fredoka text-lg font-bold text-white">${animal.name}</h4>
+                <span class="text-xs font-extrabold text-amber-300">"${animal.soundText}"</span>
+              </div>
+            </div>
+            <span class="w-10 h-10 rounded-full bg-slate-800 text-sky-400 flex items-center justify-center">
+              <i class="fa-solid fa-volume-high"></i>
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">${animal.fact}</p>
+        </div>
+      `).join('');
+    }
+
+    function triggerAnimalCard(idx) {
+      const animal = ANIMALS_DATA[idx];
+      document.getElementById('animal-now-playing').innerHTML =
+        `<i class="fa-solid fa-volume-high text-amber-400 mr-1.5"></i> ${animal.emoji} ${animal.name}: "${animal.soundText}"`;
+      playAnimalSynth(animal.freq);
+      speakText(`${animal.name} says ${animal.soundText}. Fun fact: ${animal.fact}`);
+    }
+
+    /* -----------------------------------------------------------------------
+       8. LEARNING LIBRARY (FILTERING & PREVIEW MODAL)
+    ----------------------------------------------------------------------- */
+    function filterLibrary(category, btnEl) {
+      if (btnEl) {
+        document.querySelectorAll('.lib-filter-btn').forEach(b => {
+          b.className = 'lib-filter-btn px-4 py-2 rounded-xl font-fredoka text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+        });
+        btnEl.className = 'lib-filter-btn px-4 py-2 rounded-xl font-fredoka text-sm font-semibold bg-sky-400 text-slate-950 transition';
+      }
+      renderLibrary(category);
+    }
+
+    function renderLibrary(category) {
+      const grid = document.getElementById('library-grid');
+      const filtered = category === 'All'
+        ? LIBRARY_ACTIVITIES
+        : LIBRARY_ACTIVITIES.filter(item => item.age === category || item.subject === category);
+
+      grid.innerHTML = filtered.map((act) => {
+        const originalIdx = LIBRARY_ACTIVITIES.indexOf(act);
+        return `
+          <div class="wonder-card p-6 flex flex-col justify-between gap-4">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-4xl">${act.emoji}</span>
+                <div class="flex gap-1.5">
+                  <span class="px-2.5 py-1 rounded-lg bg-sky-400/15 text-sky-300 text-xs font-bold">${act.age}</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-purple-400/15 text-purple-300 text-xs font-bold">${act.subject}</span>
+                </div>
+              </div>
+              <h3 class="font-fredoka text-xl font-bold text-white">${act.title}</h3>
+              <p class="text-sm text-slate-400 mt-1.5 leading-relaxed">${act.desc}</p>
+            </div>
+            <button onclick="openActivityModal(${originalIdx})" class="btn-wonder w-full py-2.5 rounded-xl bg-slate-800 hover:bg-sky-400 hover:text-slate-950 text-sky-300 font-bold text-sm border border-sky-400/30">
+              <i class="fa-solid fa-book-open mr-1.5"></i> Preview Mini-Lesson
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* -----------------------------------------------------------------------
+       9. CREATIVE CORNER DOODLE PAD
+    ----------------------------------------------------------------------- */
+    let doodleCanvas, doodleCtx, isDoodling = false, lastDoodlePt = null;
+
+    function initDoodleCanvas() {
+      doodleCanvas = document.getElementById('doodle-canvas');
+      doodleCtx = doodleCanvas.getContext('2d');
+      resizeDoodleCanvas();
+
+      const getPos = (e) => {
+        const rect = doodleCanvas.getBoundingClientRect();
+        const cx = e.touches ? e.touches[0].clientX : e.clientX;
+        const cy = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: cx - rect.left, y: cy - rect.top };
+      };
+
+      const start = (e) => {
+        e.preventDefault();
+        isDoodling = true;
+        lastDoodlePt = getPos(e);
+      };
+
+      const move = (e) => {
+        if (!isDoodling) return;
+        e.preventDefault();
+        const pt = getPos(e);
+        doodleCtx.strokeStyle = state.doodleColor;
+        doodleCtx.lineWidth = state.doodleSize;
+        doodleCtx.lineCap = 'round';
+        doodleCtx.lineJoin = 'round';
+        doodleCtx.beginPath();
+        doodleCtx.moveTo(lastDoodlePt.x, lastDoodlePt.y);
+        doodleCtx.lineTo(pt.x, pt.y);
+        doodleCtx.stroke();
+        lastDoodlePt = pt;
+      };
+
+      const end = () => { isDoodling = false; };
+
+      doodleCanvas.addEventListener('mousedown', start);
+      doodleCanvas.addEventListener('mousemove', move);
+      window.addEventListener('mouseup', end);
+      doodleCanvas.addEventListener('touchstart', start, { passive: false });
+      doodleCanvas.addEventListener('touchmove', move, { passive: false });
+      doodleCanvas.addEventListener('touchend', end);
+    }
+
+    function resizeDoodleCanvas() {
+      if (!doodleCanvas) return;
+      const rect = doodleCanvas.parentElement.getBoundingClientRect();
+      if (rect.width === 0) return;
+      doodleCanvas.width = rect.width;
+      doodleCanvas.height = 300;
+      clearDoodleCanvas();
+    }
+
+    function setDoodleColor(hex) { state.doodleColor = hex; }
+    function setDoodleSize(val) {
+      state.doodleSize = Number(val);
+      document.getElementById('brush-size-val').textContent = `${val}px`;
+    }
+
+    function clearDoodleCanvas() {
+      if (!doodleCtx) return;
+      doodleCtx.fillStyle = '#090E1A';
+      doodleCtx.fillRect(0, 0, doodleCanvas.width, doodleCanvas.height);
+    }
+
+    function loadDoodleTemplate(type) {
+      clearDoodleCanvas();
+      const w = doodleCanvas.width;
+      const h = doodleCanvas.height;
+      doodleCtx.save();
+      doodleCtx.strokeStyle = 'rgba(248, 250, 252, 0.45)';
+      doodleCtx.lineWidth = 3;
+      doodleCtx.setLineDash([6, 6]);
+
+      if (type === 'star') {
+        const cx = w / 2, cy = h / 2, spikes = 5, outerR = 95, innerR = 42;
+        let rot = (Math.PI / 2) * 3;
+        const step = Math.PI / spikes;
+        doodleCtx.beginPath();
+        doodleCtx.moveTo(cx, cy - outerR);
+        for (let i = 0; i < spikes; i++) {
+          doodleCtx.lineTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+          rot += step;
+          doodleCtx.lineTo(cx + Math.cos(rot) * innerR, cy + Math.sin(rot) * innerR);
+          rot += step;
+        }
+        doodleCtx.closePath();
+        doodleCtx.stroke();
+      } else if (type === 'rocket') {
+        const cx = w / 2, cy = h / 2;
+        doodleCtx.beginPath();
+        doodleCtx.moveTo(cx, cy - 95);
+        doodleCtx.quadraticCurveTo(cx + 55, cy - 20, cx + 35, cy + 65);
+        doodleCtx.lineTo(cx - 35, cy + 65);
+        doodleCtx.quadraticCurveTo(cx - 55, cy - 20, cx, cy - 95);
+        doodleCtx.stroke();
+        doodleCtx.beginPath();
+        doodleCtx.arc(cx, cy - 15, 18, 0, Math.PI * 2);
+        doodleCtx.stroke();
+      }
+      doodleCtx.restore();
+      showToast(`Loaded ${type === 'free' ? 'Blank Night Sky' : type + ' coloring outline'}!`);
+    }
+
+    function downloadDoodle() {
+      const link = document.createElement('a');
+      link.download = 'little-wonder-artwork.png';
+      link.href = doodleCanvas.toDataURL('image/png');
+      link.click();
+      addStars(1);
+      showToast('Artwork downloaded! +1 Wonder Star earned 🌟');
+    }
+
+    /* -----------------------------------------------------------------------
+       10. PRINTABLE PDF BUNDLES STORE, FLIPBOOK MODAL & SHOPPING CART
+    ----------------------------------------------------------------------- */
+    function renderBundles() {
+      const grid = document.getElementById('bundles-grid');
+      grid.innerHTML = BUNDLES_DATA.map(b => `
+        <div class="wonder-card p-6 flex flex-col justify-between bg-gradient-to-b ${b.color}">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-4xl">${b.emoji}</span>
+              <span class="px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-extrabold uppercase">
+                ${b.badge}
+              </span>
+            </div>
+            <h3 class="font-fredoka text-xl font-bold text-white">${b.title}</h3>
+            <div class="flex items-center gap-2 text-xs font-bold text-sky-300 mt-1">
+              <span>${b.pagesCount}</span>
+              <span>•</span>
+              <span>${b.ageRange}</span>
+            </div>
+            <p class="text-sm text-slate-300 mt-3 leading-relaxed">${b.desc}</p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-800 space-y-3">
+            <div class="flex items-baseline justify-between">
+              <span class="text-xs text-slate-400 font-bold uppercase">Instant PDF Download</span>
+              <span class="font-fredoka text-2xl font-bold text-amber-400">$${b.price.toFixed(2)}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button onclick="openBundleFlipbook('${b.id}')" class="btn-wonder py-2.5 px-3 rounded-xl bg-slate-800 text-sky-300 border border-sky-400/40 font-bold text-xs">
+                <i class="fa-solid fa-eye mr-1"></i> Preview Pages
+              </button>
+              <button onclick="addToCart('${b.id}')" class="btn-wonder py-2.5 px-3 rounded-xl bg-rose-400 text-slate-950 font-bold text-xs">
+                <i class="fa-solid fa-cart-plus mr-1"></i> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    let modalPages = [];
+    function openBundleFlipbook(bundleId) {
+      const bundle = BUNDLES_DATA.find(b => b.id === bundleId);
+      if (!bundle) return;
+      state.flipbookBundleId = bundleId;
+      state.flipbookPageIdx = 0;
+      modalPages = bundle.samplePages;
+      document.getElementById('modal-badge').textContent = 'PDF Sample Flipbook';
+      document.getElementById('modal-title').textContent = `${bundle.emoji} ${bundle.title}`;
+      const addBtn = document.getElementById('modal-add-cart-btn');
+      addBtn.classList.remove('hidden');
+      addBtn.onclick = () => {
+        addToCart(bundle.id);
+        closeFlipbookModal();
+      };
+      renderFlipbookPage();
+      document.getElementById('flipbook-modal').classList.remove('hidden');
+    }
+
+    function openActivityModal(actIdx) {
+      const act = LIBRARY_ACTIVITIES[actIdx];
+      state.flipbookBundleId = null;
+      state.flipbookPageIdx = 0;
+      modalPages = act.pages;
+      document.getElementById('modal-badge').textContent = `${act.age} • ${act.subject}`;
+      document.getElementById('modal-title').textContent = `${act.emoji} ${act.title}`;
+      document.getElementById('modal-add-cart-btn').classList.add('hidden');
+      renderFlipbookPage();
+      document.getElementById('flipbook-modal').classList.remove('hidden');
+    }
+
+    function renderFlipbookPage() {
+      const page = modalPages[state.flipbookPageIdx];
+      document.getElementById('modal-page-indicator').textContent =
+        `Page ${state.flipbookPageIdx + 1} of ${modalPages.length}`;
+      document.getElementById('modal-page-content').innerHTML = `
+        <div>
+          <div class="text-xs font-extrabold uppercase text-indigo-600 mb-1">Little Wonder World Sample Sheet</div>
+          <h4 class="font-fredoka text-xl font-bold text-slate-900">${page.heading}</h4>
+          <p class="text-base text-slate-700 mt-4 leading-relaxed">${page.body}</p>
+        </div>
+        <div class="pt-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-400 font-bold">
+          <span>★ Screen-Free Printable Edition</span>
+          <span>Page ${state.flipbookPageIdx + 1}</span>
+        </div>
+      `;
+    }
+
+    function changeFlipbookPage(delta) {
+      state.flipbookPageIdx = (state.flipbookPageIdx + delta + modalPages.length) % modalPages.length;
+      renderFlipbookPage();
+    }
+
+    function closeFlipbookModal() {
+      document.getElementById('flipbook-modal').classList.add('hidden');
+    }
+
+    /* Shopping Cart Drawer */
+    function toggleCart(open) {
+      const drawer = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-overlay');
+      if (open) {
+        overlay.classList.remove('hidden');
+        drawer.classList.remove('translate-x-full');
+      } else {
+        overlay.classList.add('hidden');
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function addToCart(bundleId) {
+      const bundle = BUNDLES_DATA.find(b => b.id === bundleId);
+      if (!bundle) return;
+      const existing = state.cart.find(item => item.id === bundleId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({ ...bundle, qty: 1 });
+      }
+      renderCart();
+      playSuccessChime();
+      showToast(`Added "${bundle.title}" to cart!`);
+    }
+
+    function updateCartQty(bundleId, delta) {
+      const item = state.cart.find(i => i.id === bundleId);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        state.cart = state.cart.filter(i => i.id !== bundleId);
+      }
+      renderCart();
+    }
+
+    function applyPromoCode() {
+      const input = document.getElementById('promo-code-input').value.trim().toUpperCase();
+      if (input === 'WONDER20') {
+        state.promoApplied = true;
+        renderCart();
+        playSuccessChime();
+        showToast('Promo code WONDER20 applied! 20% off!');
+      } else {
+        showToast('Try code WONDER20 for 20% off!');
+      }
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cart-items-container');
+      const totalQty = state.cart.reduce((sum, i) => sum + i.qty, 0);
+      document.getElementById('cart-badge').textContent = totalQty;
+
+      if (state.cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-16 space-y-3">
+            <div class="text-5xl">🧺</div>
+            <p class="font-fredoka text-lg text-slate-300">Your Wonder Cart is empty</p>
+            <p class="text-xs text-slate-500">Explore our printable PDF activity bundles to spark screen-free fun!</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = state.cart.map(item => `
+          <div class="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="text-3xl">${item.emoji}</span>
+              <div>
+                <h4 class="font-fredoka font-bold text-sm text-white">${item.title}</h4>
+                <span class="text-xs text-amber-400 font-bold">$${(item.price * item.qty).toFixed(2)}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="updateCartQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold">-</button>
+              <span class="text-sm font-bold w-5 text-center">${item.qty}</span>
+              <button onclick="updateCartQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold">+</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const subtotal = state.cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+      const discount = state.promoApplied ? subtotal * 0.2 : 0;
+      const total = subtotal - discount;
+
+      document.getElementById('cart-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      const discRow = document.getElementById('cart-discount-row');
+      if (state.promoApplied && subtotal > 0) {
+        discRow.classList.remove('hidden');
+        document.getElementById('cart-discount').textContent = `-$${discount.toFixed(2)}`;
+      } else {
+        discRow.classList.add('hidden');
+      }
+      document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
+    }
+
+    function checkoutCart() {
+      if (state.cart.length === 0) {
+        showToast('Add a printable PDF bundle first!');
+        return;
+      }
+      state.cart = [];
+      state.promoApplied = false;
+      renderCart();
+      toggleCart(false);
+      addStars(5);
+      playSuccessChime();
+      spawnConfetti(window.innerWidth / 2, window.innerHeight / 2);
+      showToast('🎉 Order Complete! Your PDF bundles are ready & you earned +5 Wonder Stars!');
+    }
+
+    /* -----------------------------------------------------------------------
+       11. PAGE 2: WORKSHEETS, CERTIFICATE GENERATOR & STICKER BOARD
+    ----------------------------------------------------------------------- */
+    function renderWorksheetSelector() {
+      const list = document.getElementById('worksheet-selector-list');
+      list.innerHTML = SAMPLE_WORKSHEETS.map((ws, idx) => `
+        <button onclick="selectWorksheet(${idx})"
+          class="ws-select-btn w-full text-left p-4 rounded-2xl border transition
+            ${idx === state.activeWorksheetIdx ? 'bg-sky-400/20 border-sky-400 text-white' : 'bg-slate-900/90 border-slate-800 text-slate-300 hover:border-slate-600'}">
+          <div class="font-fredoka font-bold text-base">${ws.title}</div>
+          <div class="text-xs text-slate-400 mt-0.5">${ws.subtitle}</div>
+        </button>
+      `).join('');
+    }
+
+    function selectWorksheet(idx) {
+      state.activeWorksheetIdx = idx;
+      renderWorksheetSelector();
+      document.getElementById('worksheet-preview-sheet').innerHTML = SAMPLE_WORKSHEETS[idx].html;
+    }
+
+    function printActiveWorksheet() {
+      const printArea = document.getElementById('printable-area');
+      printArea.innerHTML = document.getElementById('worksheet-preview-sheet').innerHTML;
+      printArea.classList.remove('hidden');
+      window.print();
+      printArea.classList.add('hidden');
+    }
+
+    function updateCertificate() {
+      const name = document.getElementById('cert-child-name').value.trim() || 'Super Explorer';
+      const award = document.getElementById('cert-award-title').value;
+      document.getElementById('cert-preview-name').textContent = name;
+      document.getElementById('cert-preview-award').textContent = award;
+    }
+
+    function printCertificate() {
+      const printArea = document.getElementById('printable-area');
+      printArea.innerHTML = document.getElementById('certificate-card').outerHTML;
+      printArea.classList.remove('hidden');
+      window.print();
+      printArea.classList.add('hidden');
+    }
+
+    function addStickerToBoard(emoji) {
+      const board = document.getElementById('sticker-board-canvas');
+      const hint = document.getElementById('sticker-board-hint');
+      if (hint) hint.classList.add('hidden');
+
+      const sticker = document.createElement('button');
+      sticker.type = 'button';
+      sticker.textContent = emoji;
+      sticker.className = 'absolute text-4xl sm:text-5xl animate-pop cursor-pointer select-none hover:scale-125 transition drop-shadow-lg';
+      sticker.style.left = `${10 + Math.random() * 78}%`;
+      sticker.style.top = `${12 + Math.random() * 68}%`;
+      sticker.style.transform = `rotate(${Math.floor(Math.random() * 30 - 15)}deg)`;
+      sticker.onclick = () => {
+        playSuccessChime();
+        const rect = sticker.getBoundingClientRect();
+        spawnConfetti(rect.left + 20, rect.top + 20);
+      };
+      board.appendChild(sticker);
+      playSuccessChime();
+    }
+
+    function clearStickerBoard() {
+      const board = document.getElementById('sticker-board-canvas');
+      board.innerHTML = `
+        <p id="sticker-board-hint" class="text-slate-500 font-fredoka text-lg pointer-events-none">
+          Tap stickers above to fill your night sky! ✨
+        </p>
+      `;
+    }
+
+    /* -----------------------------------------------------------------------
+       12. STARS, CONFETTI, TOASTS & NEWSLETTER
+    ----------------------------------------------------------------------- */
+    function addStars(amount) {
+      state.stars += amount;
+      document.getElementById('header-stars-count').textContent = state.stars;
+      document.getElementById('parent-stat-stars').textContent = `${state.stars} ⭐`;
+    }
+
+    function spawnConfetti(originX, originY) {
+      const colors = ['#FBBF24', '#38BDF8', '#FB7185', '#34D399', '#C084FC'];
+      for (let i = 0; i < 24; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = `${originX}px`;
+        piece.style.top = `${originY}px`;
+        piece.style.backgroundColor = colors[i % colors.length];
+        const angle = (Math.PI * 2 * i) / 24;
+        const velocity = 60 + Math.random() * 110;
+        piece.style.setProperty('--tx', `${Math.cos(angle) * velocity}px`);
+        piece.style.setProperty('--ty', `${Math.sin(angle) * velocity + 80}px`);
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 1650);
+      }
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto px-4 py-3 rounded-2xl bg-slate-900 border border-amber-400/60 text-white text-sm font-bold shadow-2xl animate-pop flex items-center gap-2';
+      toast.innerHTML = `<i class="fa-solid fa-sparkles text-amber-400"></i><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3400);
+    }
+
+    function handleNewsletterSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('newsletter-email');
+      if (!input.value) return;
+      input.value = '';
+      addStars(2);
+      playSuccessChime();
+      showToast('Welcome to the Printable Club! +2 Wonder Stars earned 🌟');
+    }
+  </script>
+</body>
+</html>
