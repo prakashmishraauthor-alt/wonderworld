@@ -181,6 +181,37 @@
         padding: 24px;
       }
     }
+    .balloon-tile {
+      position: absolute;
+      bottom: -60px;
+      width: 58px;
+      height: 70px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #FFF;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.25);
+      animation: floatBalloon linear forwards;
+      transition: transform 0.1s ease;
+    }
+    .balloon-tile::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      width: 2px;
+      height: 14px;
+      background: rgba(255,255,255,0.4);
+    }
+    @keyframes floatBalloon {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-360px); }
+    }
   </style>
 </head>
 <body class="relative selection:bg-amber-400 selection:text-slate-900">
@@ -557,7 +588,82 @@
           </div>
         </div>
       </div>
+      
+<!-- Playground Tabs -->
+      <div class="flex flex-wrap justify-center gap-3 mb-8" role="tablist">
+        <button id="tab-btn-tracing" onclick="switchPlaygroundTab('tracing')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-amber-400 text-slate-950 font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-pen-nib"></i>
+          1. Alphabet &amp; Tracing
+        </button>
+        <button id="tab-btn-counting" onclick="switchPlaygroundTab('counting')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-star"></i>
+          2. Counting Adventure
+        </button>
+        <button id="tab-btn-animals" onclick="switchPlaygroundTab('animals')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-paw"></i>
+          3. Animal Sounds &amp; Facts
+        </button>
+        <!-- NEW GAME TABS -->
+        <button id="tab-btn-balloon" onclick="switchPlaygroundTab('balloon')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-balloon"></i>
+          4. Balloon Pop
+        </button>
+        <button id="tab-btn-train" onclick="switchPlaygroundTab('train')" class="btn-wonder px-6 py-3.5 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-train"></i>
+          5. Alphabet Train
+        </button>
+      </div>
+      <!-- TAB 4: LETTER BALLOON POP GAME -->
+      <div id="tab-panel-balloon" class="hidden wonder-card p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-800">
+          <div>
+            <h3 id="balloonPrompt" class="text-2xl font-bold text-rose-400">Pop the letter: A</h3>
+            <p class="text-sm text-slate-400">Tap the floating balloon that matches the target letter!</p>
+          </div>
+          <div class="px-4 py-2 rounded-2xl bg-slate-900 border border-rose-400/40 text-sm font-bold">
+            🎈 Popped: <span id="balloonScore" class="text-rose-400 font-fredoka text-lg">0</span>
+          </div>
+        </div>
 
+        <div id="balloonArena" class="relative my-6 h-80 rounded-3xl bg-slate-950/90 border-2 border-rose-500/30 overflow-hidden flex items-end justify-center">
+          <!-- Floating balloons injected dynamically -->
+        </div>
+
+        <div class="text-center">
+          <button onclick="startBalloonGame()" class="btn-wonder px-6 py-3 rounded-xl bg-rose-500 text-white font-bold text-sm">
+            <i class="fa-solid fa-play mr-1.5"></i> Restart Balloon Game
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 5: ALPHABET TRAIN GAME -->
+      <div id="tab-panel-train" class="hidden wonder-card p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-800">
+          <div>
+            <h3 class="text-2xl font-bold text-sky-300">Alphabet Train Adventure</h3>
+            <p class="text-sm text-slate-400">Click the missing letter card to fill the train car in order!</p>
+          </div>
+          <div class="px-4 py-2 rounded-2xl bg-slate-900 border border-sky-400/40 text-sm font-bold">
+            🚂 Cars Connected: <span id="trainScore" class="text-sky-400 font-fredoka text-lg">0</span>
+          </div>
+        </div>
+
+        <!-- Train Track Container -->
+        <div class="my-8 py-6 px-4 rounded-3xl bg-slate-950/90 border-2 border-sky-500/30 flex flex-wrap items-center justify-center gap-3">
+          <div id="trainCarsContainer" class="flex flex-wrap items-center justify-center gap-3">
+            <!-- Train cars injected by JS -->
+          </div>
+        </div>
+
+        <!-- Letter Choices -->
+        <div class="text-center space-y-4">
+          <p class="font-fredoka text-lg font-bold text-slate-300">Choose the correct letter for the empty car:</p>
+          <div id="trainChoicesContainer" class="flex flex-wrap items-center justify-center gap-4">
+            <!-- Options injected by JS -->
+          </div>
+          <p id="trainFeedback" class="h-7 font-fredoka text-lg font-semibold text-amber-300"></p>
+        </div>
+      </div>
       <!-- TAB 2: COUNTING ADVENTURE -->
       <div id="tab-panel-counting" class="hidden wonder-card p-6 sm:p-8">
         <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-800">
@@ -2313,6 +2419,162 @@
       addStars(2);
       playSuccessChime();
       showToast('Welcome to the Printable Club! +2 Wonder Stars earned 🌟');
+    }
+    // Update switchPlaygroundTab to include 'balloon' and 'train'
+    function switchPlaygroundTab(tabName) {
+      const tabs = ['tracing', 'counting', 'animals', 'balloon', 'train'];
+      tabs.forEach(t => {
+        const panel = document.getElementById(`tab-panel-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabName) {
+          panel.classList.remove('hidden');
+          btn.className = 'btn-wonder px-6 py-3.5 rounded-2xl bg-amber-400 text-slate-950 font-bold text-sm sm:text-base flex items-center gap-2';
+        } else {
+          panel.classList.add('hidden');
+          btn.className = 'btn-wonder px-6 py-3.5 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm sm:text-base flex items-center gap-2';
+        }
+      });
+      if (tabName === 'tracing') {
+        setTimeout(resizeTracingCanvas, 30);
+      } else if (tabName === 'balloon') {
+        startBalloonGame();
+      } else if (tabName === 'train') {
+        initTrainGame();
+      }
+    }
+
+    /* --- BALLOON POP GAME LOGIC --- */
+    let balloonScore = 0;
+    let balloonTargetLetter = 'A';
+    let balloonInterval = null;
+
+    function startBalloonGame() {
+      const arena = document.getElementById('balloonArena');
+      if (!arena) return;
+      arena.innerHTML = '';
+      balloonScore = 0;
+      document.getElementById('balloonScore').textContent = balloonScore;
+      pickNewBalloonTarget();
+      clearInterval(balloonInterval);
+      spawnSingleBalloon();
+      balloonInterval = setInterval(spawnSingleBalloon, 1400);
+    }
+
+    function pickNewBalloonTarget() {
+      const randomEntry = ALPHABET_DATA[Math.floor(Math.random() * ALPHABET_DATA.length)];
+      balloonTargetLetter = randomEntry.letter;
+      document.getElementById('balloonPrompt').textContent = `Pop the letter: ${balloonTargetLetter}`;
+      speakText(`Pop the letter ${balloonTargetLetter}`);
+    }
+
+    function spawnSingleBalloon() {
+      const arena = document.getElementById('balloonArena');
+      if (!arena || arena.offsetParent === null) return;
+
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon-tile';
+
+      const isTarget = Math.random() < 0.4;
+      const letter = isTarget
+        ? balloonTargetLetter
+        : ALPHABET_DATA[Math.floor(Math.random() * ALPHABET_DATA.length)].letter;
+
+      const colors = ['#FB7185', '#38BDF8', '#FBBF24', '#34D399', '#C084FC', '#F97316'];
+      balloon.textContent = letter;
+      balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      balloon.style.left = `${Math.floor(Math.random() * 80) + 6}%`;
+      balloon.style.animationDuration = `${(Math.random() * 1.5 + 4.0).toFixed(1)}s`;
+
+      balloon.onpointerdown = () => {
+        if (letter === balloonTargetLetter) {
+          balloonScore++;
+          document.getElementById('balloonScore').textContent = balloonScore;
+          addStars(1);
+          playSuccessChime();
+          const rect = balloon.getBoundingClientRect();
+          spawnConfetti(rect.left + 25, rect.top + 25);
+          speakText(`Pop! Great job finding ${balloonTargetLetter}!`);
+          balloon.remove();
+          pickNewBalloonTarget();
+        } else {
+          playBoopSound();
+          speakText(`That is ${letter}. Find ${balloonTargetLetter}!`);
+          balloon.style.opacity = '0.4';
+        }
+      };
+
+      balloon.addEventListener('animationend', () => {
+        balloon.remove();
+      });
+
+      arena.appendChild(balloon);
+    }
+
+    /* --- ALPHABET TRAIN GAME LOGIC --- */
+    let trainScore = 0;
+    let currentTrainSequence = [];
+    let missingIndex = 0;
+
+    function initTrainGame() {
+      // Pick a random starting index between 0 and 22 (so we have 4 sequential letters)
+      const startIdx = Math.floor(Math.random() * 23);
+      currentTrainSequence = [
+        ALPHABET_DATA[startIdx].letter,
+        ALPHABET_DATA[startIdx + 1].letter,
+        ALPHABET_DATA[startIdx + 2].letter,
+        ALPHABET_DATA[startIdx + 3].letter
+      ];
+      missingIndex = Math.floor(Math.random() * 4); // Random car to hide
+
+      renderTrainCars();
+      renderTrainChoices(currentTrainSequence[missingIndex]);
+      document.getElementById('trainFeedback').textContent = '';
+    }
+
+    function renderTrainCars() {
+      const container = document.getElementById('trainCarsContainer');
+      container.innerHTML = currentTrainSequence.map((char, idx) => {
+        const isMissing = idx === missingIndex;
+        return `
+          <div class="w-16 h-20 sm:w-20 sm:h-24 rounded-2xl bg-slate-900 border-2 ${isMissing ? 'border-dashed border-amber-400 bg-amber-400/10' : 'border-sky-400'} flex flex-col items-center justify-center shadow-lg font-fredoka">
+            <span class="text-xs text-slate-400">Car ${idx + 1}</span>
+            <span class="text-2xl sm:text-3xl font-bold text-white">${isMissing ? '❓' : char}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTrainChoices(correctLetter) {
+      const choicesBox = document.getElementById('trainChoicesContainer');
+      const wrongOptions = ALPHABET_DATA.map(a => a.letter).filter(l => l !== correctLetter);
+      const shuffledWrong = wrongOptions.sort(() => Math.random() - 0.5).slice(0, 3);
+      const options = [correctLetter, ...shuffledWrong].sort(() => Math.random() - 0.5);
+
+      choicesBox.innerHTML = options.map(letter => `
+        <button onclick="checkTrainAnswer('${letter}', '${correctLetter}')"
+          class="btn-wonder w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-800 hover:bg-sky-400 hover:text-slate-950 text-white font-fredoka text-2xl font-bold border border-slate-700 flex items-center justify-center shadow">
+          ${letter}
+        </button>
+      `).join('');
+    }
+
+    function checkTrainAnswer(chosen, correct) {
+      const feedback = document.getElementById('trainFeedback');
+      if (chosen === correct) {
+        trainScore++;
+        document.getElementById('trainScore').textContent = trainScore;
+        addStars(1);
+        playSuccessChime();
+        feedback.textContent = `Choo-choo! Correct! ${correct} connects the train! 🚂`;
+        feedback.className = 'h-7 font-fredoka text-lg font-semibold text-emerald-400';
+        speakText(`Choo choo! Great job!`);
+        setTimeout(initTrainGame, 1400);
+      } else {
+        playBoopSound();
+        feedback.textContent = `Not quite! Look at the alphabet order.`;
+        feedback.className = 'h-7 font-fredoka text-lg font-semibold text-rose-400';
+        speakText(`Try another letter!`);
+      }
     }
   </script>
 </body>
